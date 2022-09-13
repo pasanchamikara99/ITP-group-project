@@ -1,12 +1,23 @@
 from contextlib import redirect_stderr
 from http.client import HTTPResponse
 from pickle import NONE
+from re import template
+from urllib import response
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib import messages
 from authentication.models import EmployeesReg,EmployeeLeave
 from cryptography.fernet import Fernet
 import smtplib
 from django.contrib.auth.hashers import check_password,make_password
+from django.http import HttpResponse,FileResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+
+
 
 
 
@@ -88,6 +99,7 @@ def login(request):
                 empid = request.POST.get('empid',None)
                 context['empid'] = empid
                 context['fname'] = emp.fname
+                
 
                 if emp.position == "admin" :
                     messages.success(request,"Admin login sucessfully")
@@ -105,12 +117,20 @@ def login(request):
 
 
 def adminpage(request):
-    return render(request,"admin.html",context)
+
+    result = EmployeesReg.objects.all() 
+    employee = {
+        "details" :result
+    }
+
+    return render(request,"admin.html",employee)
 
 def userpage(request):
     return render(request,"user.html",context)
 
 def changepassword(request):
+
+    
 
     if request.method == "POST":
         empID = request.POST.get('empid')
@@ -135,32 +155,7 @@ def changepassword(request):
                     messages.success(request,"Change password sucessfully")
                     return  redirect("userpage")
 
-
-
-            
-
-
-            
-    
-
-
-            
-
-
-
-
-    
-
-
-
     return render(request,"changepassword.html",context)
-
-    
-
-        
-        
-
-
 
     return render(request,"changepassword.html",context)
 
@@ -181,6 +176,46 @@ def applyleave(request):
 
 
     return render(request,"applyleave.html",context)
+
+
+def generatepdf(request):
+
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf,pagesize=letter,bottomup=0)
+    textob = c.beginText()
+    textob.setTextOrigin(inch,inch)
+    textob.setFont("Helvetica",14)
+
+
+    result = EmployeesReg.objects.all()
+
+    lines = []
+
+    for emp in result:
+       lines.append("Employee ID : " + emp.empid)
+       lines.append("Employee First Name : " + emp.fname)
+       lines.append("Employee Last Name : " + emp.lname)
+       lines.append("Employee Email : " + emp.email)
+       lines.append("Employee Position : " + emp.position)
+       lines.append("====================")
+
+    for line in lines:
+        textob.textLine(line)
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+
+    return FileResponse(buf,as_attachment=True,filename='employee.pdf')
+
+
+
+
+    
+
+
 
 
 
