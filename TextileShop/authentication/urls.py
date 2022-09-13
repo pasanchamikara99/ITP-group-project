@@ -10,4 +10,5 @@ urlpatterns = [
     path('userpage',views.userpage, name = "userpage"),
     path('changepassword',views.changepassword, name = "changepassword"),
     path('applyleave',views.applyleave, name = "applyleave"),
+    path('generatepdf',views.generatepdf, name = "generatepdf"),
 ]
