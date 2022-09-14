@@ -31,7 +31,7 @@
                 <td>{{emp.lname}}</td>
                 <td>{{emp.email}}</td>
                 <td>{{emp.position}}</td>
-                <td><a id="update" href="">Update</a> <a id="delete" href="">Delete</a></td>
+                <td><a id="update" href="{% url 'update_emp' emp.id %}">Update</a> <a id="delete" href="{% url 'delete_emp' emp.id %}">Delete</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

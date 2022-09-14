@@ -129,9 +129,6 @@ def userpage(request):
     return render(request,"user.html",context)
 
 def changepassword(request):
-
-    
-
     if request.method == "POST":
         empID = request.POST.get('empid')
         password = request.POST.get('password')
@@ -211,7 +208,44 @@ def generatepdf(request):
     return FileResponse(buf,as_attachment=True,filename='employee.pdf')
 
 
+def update_emp(request,id):
+    employee = EmployeesReg.objects.get(id = id)
+    context['id'] = employee.id
+    context['empid'] = employee.empid
+    context['fname'] = employee.fname
+    context['lname'] = employee.lname
+    context['email'] = employee.email
+    context['position'] = employee.position
+    return render(request,"updateuser.html",context)
 
+def updateuser(request):
+    if request.method == "POST":
+        empID = request.POST['empid']
+        fname = request.POST['fname']
+        lname = request.POST['lname']
+        email = request.POST['email']
+        position = request.POST['position']
+
+        result = EmployeesReg.objects.filter(empid=empID)   
+        for re in result:
+            saveRecord = EmployeesReg()
+            saveRecord.id = re.id
+            saveRecord.empid = empID
+            saveRecord.fname = fname
+            saveRecord.lname = lname
+            saveRecord.email = email
+            saveRecord.position = position
+            saveRecord.password = re.password
+            saveRecord.save()
+            messages.success(request,"Update details sucessfully")
+
+    return  redirect("adminpage")
+
+
+def delete_emp(request,id):
+
+    print(id)
+    employee = EmployeesReg.objects.get(id = id)
 
     
 
