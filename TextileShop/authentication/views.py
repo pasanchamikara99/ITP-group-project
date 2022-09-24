@@ -157,6 +157,8 @@ def adminpage(request):
 def userpage(request):
     return render(request,"user.html",context)
 
+    
+
 def changepassword(request):
     if request.method == "POST":
         empID = request.POST.get('empid')
