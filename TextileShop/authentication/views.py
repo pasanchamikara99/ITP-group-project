@@ -5,7 +5,7 @@ from re import template
 from urllib import response
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib import messages
-from authentication.models import EmployeesReg,EmployeeLeave
+from authentication.models import EmployeesReg,Leave,employee_positions,leave_types
 from cryptography.fernet import Fernet
 import smtplib
 from django.contrib.auth.hashers import check_password,make_password
@@ -16,6 +16,7 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+from django.core.mail import send_mail
 
 
 
@@ -30,15 +31,26 @@ context = {}
 #send employee to his userid and password
 def sendMail(fname,email,empID,password):
 
-    subject = "Hello " + fname + "\n Your Employee id is " + empID + "\n User password is  " + password
-    server = smtplib.SMTP('smtp.gmail.com',587)
-    server.starttls()
-    server.login('jayanandanafachion@gmail.com','ncipterepthpugjl')
-    server.sendmail('jayanandanafashion@gmail.com',email,subject)
+    subject = "Employee Registration"
+    message = "Hello " + fname + "\nYour Employee id is " + empID + "\nUser password is  " + password
+    #server = smtplib.SMTP('smtp.gmail.com',587)
+    #server.starttls()
+    #server.login('jayanandanafachion@gmail.com','ncipterepthpugjl')
+    #server.sendmail('jayanandanafashion@gmail.com',email,subject)
 
+    send_mail(
+        subject,message,'jayanandanafachion@gmail.com',[email]
+    )
 
 
 def register(request):
+
+    context = {}
+    positiondetails = employee_positions.objects.all()
+
+    context['positions'] = positiondetails
+
+
 
     if request.method == "POST":
 
@@ -49,9 +61,18 @@ def register(request):
         position = request.POST['position']
         password = request.POST.get('password')
         passwordc = request.POST.get('passwordc')
+
+       # employees = 
         
         if password != passwordc :
                 messages.success(request,"Password mismatch , try again !!! ")
+
+        elif EmployeesReg.objects.filter(empid = empID).exists() :
+                messages.success(request,"Employee ID already exists, try new ID  !!! ")
+        
+        ##elif EmployeesReg.objects.filter(email = email).exists() :
+               # messages.success(request,"Employee email already exists, try new email  !!! ")
+
         else:
                 saveRecord = EmployeesReg()
                 saveRecord.empid = empID
@@ -69,7 +90,7 @@ def register(request):
 
            
            
-    return  render(request,"register.html")
+    return  render(request,"register.html",context)
 
 
 
@@ -118,10 +139,18 @@ def login(request):
 
 def adminpage(request):
 
+
+    employee = {}
     result = EmployeesReg.objects.all() 
-    employee = {
-        "details" :result
-    }
+    count = EmployeesReg.objects.all().count() 
+    position = employee_positions.objects.all().count() 
+    positiondetails = employee_positions.objects.all()
+
+    employee["count"] = count
+    employee["position"] = position
+    employee["details"] = result
+    employee["positionDetails"] = positiondetails
+
 
     return render(request,"admin.html",employee)
 
@@ -164,10 +193,11 @@ def applyleave(request):
         date = request.POST.get('date')
         reason = request.POST.get('reason')
 
-        saveRecord = EmployeeLeave()
+        saveRecord = Leave()
         saveRecord.empid = empID
         saveRecord.date = date
         saveRecord.reason = reason
+        saveRecord.status = "pending"
         saveRecord.save()
         messages.success(request,"Apply leave sucessfully")
 
@@ -203,7 +233,6 @@ def generatepdf(request):
     c.showPage()
     c.save()
     buf.seek(0)
-
 
     return FileResponse(buf,as_attachment=True,filename='employee.pdf')
 
@@ -243,9 +272,32 @@ def updateuser(request):
 
 
 def delete_emp(request,id):
-
     print(id)
     employee = EmployeesReg.objects.get(id = id)
+    employee.delete()
+    messages.success(request,"Delete details sucessfully")
+    return  redirect("adminpage")
+
+
+def leaves(request):
+    result = Leave.objects.all() 
+    count = EmployeesReg.objects.all().count()
+    leave_type = leave_types.objects.all()
+    leave_type_count = leave_types.objects.all().count()
+    pending = Leave.objects.filter(status = "pending").count()
+
+
+    leave = {}
+
+    leave['leaveDetails'] = result
+    leave['count'] = count
+    leave['pendingCount'] = pending
+    leave['leave_type'] = leave_type
+    leave['leave_type_count'] = leave_type_count
+
+   
+
+    return render(request,"table.html",leave)
 
     
 

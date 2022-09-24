@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
+a{
+    text-decoration: none;
+    padding: 10px 15px;
+    border-style:none;
+}
+.quickButtons{
+    margin-left: 15rem;
+    margin-top: 2rem;
+    width: 80%;
+    display: flex;
+}
+
+.positions , .totalEmp,.new{
+    width: 40%;
+    margin: 10px;
+    border-style: solid;
+    border-color: #0AB8DA;
+    height: 8rem;
+}
+h2
+{
+    margin-left: 15px;
+}
+.quickButtons h3{
+    text-align: right;
+    margin-right: 5rem;
+    font-size: 25px;
+}
+
+
+
+.adminDashboard{
+    margin-left: 15rem;
+    margin-top: 2rem;
+    width: 85%;
+    display: flex;
+}
+i{
+    color: white;
+    size: 5cm;
+    margin-right: 5px;
+}
+
+.tableOne{
+    width: 40%;
+}
+
+.tableTwo{
+    width: 55%;
+    margin-left: 2rem;
+}
+
+.table_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(240, 240, 240);
+}
+
+.addNew{
+    background-color:#6ADC0B;
+    color: white;
+}
+
+.print{
+    background-color: #0AB8DA;
+    color: white;
+}
+
+.update i{
+    color: blue;
+    size: 50px;
+}
+.delete i{
+    color: red;
+    size: 50px;
+   
+}
+thead th{
+    position: sticky;
+    top: 0;
+    background-color: #f6f9fc;
+    color: #8493a5;
+    font-size: 11px;
+}
+th,td{
+    border-bottom: 1px solid #dddddd;
+    padding: 7px 7px;
+    text-align: center;
+    word-break: break-all;
+    font-size: 12px;
+}

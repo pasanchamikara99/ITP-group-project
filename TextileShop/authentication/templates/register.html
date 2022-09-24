@@ -210,10 +210,10 @@
 
                             <div class="col-md-12">
                                 <select class="form-select mt-3" name="position" required>
-                                    <option value="financeManager">Finance Manager</option>
-                                    <option value="salesManager">Sales Manager</option>
-                                    <option value="admin">admin</option>
-                                    <option value="other">other</option>
+                                    {% for emp in positions %}
+                                    <option value="{{emp.name}}">{{emp.name}}</option>
+                                    
+                                    {% endfor %}
                                 </select>
                             </div>
 

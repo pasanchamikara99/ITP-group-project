@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%  static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    
+    <title>admin</title>
+</head>
+<body>
+
+
+
+    <div class="quickButtons">
+
+        <div class="positions">
+               
+            <h2> Total No of Positions : </h2>
+            <h3>  {{position}}  </h3>
+        </div>
+
+        <div class="totalEmp">
+            <h2> Total No of Employees : </h2>
+            <h3> {{count}} </h3>
+            
+        </div>
+
+        <div class="new">
+            <h2> ddskjjkd: </h2>
+            <h3> {{position}} </h3>
+        </div>
+    </div>
+
+
+    <div class="adminDashboard">
+
+
+        <div class="tableOne">
+            <div class="table_header">
+                <h3>Employee Position Details</h3>
+    
+                <div>
+                    <a href="register"class = "addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
+                </div>
+                
+            </div>
+    
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Position  ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in positionDetails %}
+                    <tr>
+                    <td>{{result.id}}</td>
+                    <td>{{result.name}}</td>
+                    <td>{{result.description}}</td>
+                        <td><a href="{% url 'update_emp' result.id %}" class="update"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <a href="{% url 'delete_emp' result.id %}"class = "delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tableTwo">
+            <div class="table_header">
+                <h3>Employee Details</h3>
+    
+                <div>
+                    <a href="generatepdf" class="print"> <i class="fa fa-print" aria-hidden="true"></i>Print Details</a>
+                    <a href="register"class = "addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
+                </div>
+                
+            </div>
+    
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>E-mail</th>
+                            <th>Position</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emp in details %}
+                        <tr>
+                        <td>{{emp.empid}}</td>
+                        <td>{{emp.fname}}</td>
+                        <td>{{emp.lname}}</td>
+                        <td>{{emp.email}}</td>
+                        <td>{{emp.position}}</td>
+                            <td><a href="{% url 'update_emp' emp.id %}" class="update"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a href="{% url 'delete_emp' emp.id %}"class = "delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    {% for msg in messages %}
+    <script>
+        swal('{{msg}}');
+    </script>
+    {% endfor %}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    
+</body>
+</html>
