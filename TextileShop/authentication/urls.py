@@ -15,4 +15,6 @@ urlpatterns = [
     path('delete_emp/<id>',views.delete_emp, name = "delete_emp"),
     path('updateuser',views.updateuser, name = "updateuser"),
     path('leaves',views.leaves, name = "leaves"),
+    path('approve_leave/<id>',views.approve_leave, name = "approve_leave"),
+    path('reject_leave/<id>',views.reject_leave, name = "reject_leave"),
 ]

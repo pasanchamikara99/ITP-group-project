@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
-    <link rel="stylesheet" href="{%  static 'style.css' %}">
+    <link rel="stylesheet" href="{%  static 'leave.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     
@@ -23,15 +23,19 @@
             <h3>  {{leave_type_count}}  </h3>
         </div>
 
-        <div class="totalEmp">
+        <div class="positions">
             <h2> Total No of Employees : </h2>
             <h3> {{count}} </h3>
             
         </div>
 
-        <div class="new">
+        <div class="positions">
             <h2> Pending Applicartions : </h2>
             <h3> {{pendingCount}} </h3>
+        </div>
+        <div class="positions">
+            <h2> Rejected Applicartions : </h2>
+            <h3> {{reject}} </h3>
         </div>
 
     </div>
@@ -42,34 +46,38 @@
 
         <div class="tableOne">
             <div class="table_header">
-                <h3>Avaliable Leave Types</h3>
-    
+                <h3>All leave Applications</h3>   
                 <div>
-                    <a href="register"class = "addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
-                </div>
-                
+                    <a href="generatepdf" class="print"> <i class="fa fa-print" aria-hidden="true"></i>Print Details</a>
+                </div>        
             </div>
     
             <div class="table_section">
                 <table>
                     <thead>
                         <tr>
-                            <th>Leave Type ID</th>
+                            <th>Leave ID</th>
+                            <th>Employee ID</th>
                             <th>Leave Type</th>
-                            <th>description</th>
-                            <th>Action</th>
+                            <th>Applied on</th>
+                            <th>Reason</th>
+                            <th>Current Status</th>  
+                            <th>Action</th>  
                         </tr>
                     </thead>
                     <tbody>
-                        {% for leave in leave_type %}
+                        {% for emp in leaveDetails %}
                         <tr>
-
-                            <td>{{leave.id}}</td>
-                            <td>{{leave.leave_type}}</td>
-                            <td>{{leave.description}}</td>
-                            <td><a href="" class="update"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                            <td>{{emp.id}}</td>
+                            <td>{{emp.empid}}</td>
+                            <td>{{emp.leaveType}}</td>
+                            <td>{{emp.date}}</td>
+                            <td>{{emp.reason}}</td>
+                            <td>{{emp.status}}</td>
+                            <td>
                                 <a href=""class = "delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
                             </td>
+                            
                         </tr>
                         {% endfor %}
                         
@@ -97,7 +105,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for emp in leaveDetails %}
+                        {% for emp in pending_list %}
                         <tr>
                             <td>{{emp.id}}</td>
                             <td>{{emp.empid}}</td>
@@ -107,8 +115,8 @@
                             <td>{{emp.status}}</td>
                             
                             
-                            <td><a href="" class="update"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                <a href=""class = "delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <td><a href="{% url 'approve_leave' emp.id %}" class="update"> <i class="fa fa-check-circle" aria-hidden="true">approve</i></a>
+                                <a href="{% url 'reject_leave' emp.id %}"class = "delete"><i class="fa fa-ban" aria-hidden="true">Reject</i></a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -117,6 +125,50 @@
                 </table>
             </div>
         </div>
+
+    </div>
+
+    <div class="adminDashboard">
+
+
+        <div class="tableOne">
+            <div class="table_header">
+                <h3>Avaliable Leave types</h3>  
+                <div>
+                    <a href="register"class = "addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
+                </div>         
+            </div>
+    
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Leave type ID</th>
+                            <th>Leave Type</th>
+                            <th>Description</th>  
+                            <th>Action</th>  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for leave in leave_type %}
+                        <tr>
+                            <td>{{leave.id}}</td>
+                            <td>{{leave.leave_type}}</td>
+                            <td>{{leave.description}}</td>
+                            <td>
+                                <a href="" class="update"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                <a href=""class = "delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
+                            
+                        </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+       
 
     </div>
 

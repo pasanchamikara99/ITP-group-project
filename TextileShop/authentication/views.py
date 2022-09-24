@@ -190,15 +190,27 @@ def changepassword(request):
 
 
 def applyleave(request):
+ 
+    leave_type = leave_types.objects.all()
+
+    context['leaveType'] = leave_type
+    
+
+
+
+
+
     if request.method == "POST":
         empID = request.POST.get('empid')
         date = request.POST.get('date')
         reason = request.POST.get('reason')
+        leavetype = request.POST.get('leavetype')
 
         saveRecord = Leave()
         saveRecord.empid = empID
         saveRecord.date = date
         saveRecord.reason = reason
+        saveRecord.leaveType = leavetype
         saveRecord.status = "pending"
         saveRecord.save()
         messages.success(request,"Apply leave sucessfully")
@@ -282,17 +294,21 @@ def delete_emp(request,id):
 
 
 def leaves(request):
-    result = Leave.objects.all() 
+    result = Leave.objects.all()
+    pending_list = Leave.objects.filter(status = "pending") 
     count = EmployeesReg.objects.all().count()
     leave_type = leave_types.objects.all()
     leave_type_count = leave_types.objects.all().count()
     pending = Leave.objects.filter(status = "pending").count()
+    reject = Leave.objects.filter(status = "reject").count()
 
 
     leave = {}
 
     leave['leaveDetails'] = result
+    leave['reject'] = reject
     leave['count'] = count
+    leave['pending_list'] = pending_list
     leave['pendingCount'] = pending
     leave['leave_type'] = leave_type
     leave['leave_type_count'] = leave_type_count
@@ -300,6 +316,62 @@ def leaves(request):
    
 
     return render(request,"table.html",leave)
+
+
+
+def leaveMail(fname,email,date,status):
+
+    #subject = "Hello " + fname + "\n Your Leave request on   " + date + "\n is  " + status
+    #server = smtplib.SMTP('smtp.gmail.com',587)
+    #server.starttls()
+    #server.login('jayanandanafachion@gmail.com','ncipterepthpugjl')
+    #server.sendmail('jayanandanafashion@gmail.com',email,subject)
+
+
+    subject = "Leave Application"
+    message = "Hello " + fname + "\n Your Leave request on   " + date + "\n is  " + status
+    
+    send_mail(
+        subject,message,'jayanandanafachion@gmail.com',[email]
+    )
+
+
+def approve_leave(request,id):
+    leave = Leave.objects.get(id = id)
+    saveRecord = Leave()
+    saveRecord.id = leave.id
+    saveRecord.empid = leave.empid
+    saveRecord.date = leave.date
+    saveRecord.leaveType = leave.leaveType
+    saveRecord.reason = leave.reason
+    saveRecord.status = "approve"
+    saveRecord.save()
+
+    result = EmployeesReg.objects.get(empid=leave.empid)
+    status = "approve"
+    leaveMail(result.fname,result.email,leave.date,status)
+    messages.success(request,"Approve  leave Sucessfully")
+
+    return  redirect("leaves")
+
+def reject_leave(request,id):
+    leave = Leave.objects.get(id = id)
+    saveRecord = Leave()
+    saveRecord.id = leave.id
+    saveRecord.empid = leave.empid
+    saveRecord.date = leave.date
+    saveRecord.leaveType = leave.leaveType
+    saveRecord.reason = leave.reason
+    saveRecord.status = "reject"
+    saveRecord.save()
+
+    result = EmployeesReg.objects.get(empid=leave.empid)
+    status = "rejected"
+    leaveMail(result.fname,result.email,leave.date,status)
+    messages.success(request,"Reject  leave Sucessfully")
+
+    return  redirect("leaves")
+
 
     
 

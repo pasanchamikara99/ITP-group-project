@@ -15,9 +15,10 @@
                         {%csrf_token%}
                         
                         <div class="col-md-12">
-                            <input class="form-control" type="hidden" name="empid" value="{{empid}}" 
+                            <input class="form-control"  name="empid" value="{{empid}}" 
                                 required>
                         </div>
+
                         
                         <div class="col-md-12">
                             <input class="form-control" type="date" name="date" required>
@@ -25,6 +26,14 @@
 
                         <div class="col-md-12">
                             <textarea class="form-control" rows="5"  name = "reason" placeholder="Enter your reason" required></textarea>
+                        </div>
+
+                        <div class="col-md-12">
+                            <select class="form-select mt-3" name="leavetype" required>
+                                {% for leave in leaveType %}
+                                <option value="{{leave.leave_type}}">{{leave.leave_type}}</option>  
+                                {% endfor %}
+                            </select>
                         </div>
 
                         <div class="form-button mt-3">
