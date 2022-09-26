@@ -45,13 +45,6 @@ def sendMail(fname,email,empID,password):
 
 def register(request):
 
-    context = {}
-    positiondetails = employee_positions.objects.all()
-
-    context['positions'] = positiondetails
-
-
-
     if request.method == "POST":
 
         empID = request.POST['empid']
@@ -80,7 +73,6 @@ def register(request):
                 saveRecord.lname = lname
                 saveRecord.email = email
                 saveRecord.position = position
-                #saveRecord.password = encryptedPassword(password)
                 saveRecord.password = make_password(password)
                 
                 saveRecord.save()
@@ -90,7 +82,7 @@ def register(request):
 
            
            
-    return  render(request,"register.html",context)
+    return  redirect("adminpage")
 
 
 
@@ -146,10 +138,23 @@ def adminpage(request):
     position = employee_positions.objects.all().count() 
     positiondetails = employee_positions.objects.all()
 
+    admincount = EmployeesReg.objects.filter(position = "admin").count()
+    salescount = EmployeesReg.objects.filter(position = "salesManager").count()
+    ordercount = EmployeesReg.objects.filter(position = "order manager").count()
+    eventcount = EmployeesReg.objects.filter(position = "Event manager").count()
+    stockcount = EmployeesReg.objects.filter(position = "Stock manager").count()
+    employeecount = EmployeesReg.objects.filter(position = "Employee manager").count()
+
     employee["count"] = count
     employee["position"] = position
     employee["details"] = result
     employee["positionDetails"] = positiondetails
+    employee["admincount"] = admincount
+    employee["ordercount"] = ordercount
+    employee["salescount"] = salescount
+    employee["eventcount"] = eventcount
+    employee["stockcount"] = stockcount
+    employee["employeecount"] = employeecount
 
 
     return render(request,"admin.html",employee)
@@ -189,16 +194,14 @@ def changepassword(request):
 
 
 
-def applyleave(request):
+def applyleave(request,id):
  
     leave_type = leave_types.objects.all()
+    count = Leave.objects.filter(empid = id).count()
 
     context['leaveType'] = leave_type
+    context['count'] = count
     
-
-
-
-
 
     if request.method == "POST":
         empID = request.POST.get('empid')
@@ -214,6 +217,7 @@ def applyleave(request):
         saveRecord.status = "pending"
         saveRecord.save()
         messages.success(request,"Apply leave sucessfully")
+        return  redirect("userpage")
 
 
     return render(request,"applyleave.html",context)
@@ -252,6 +256,7 @@ def generatepdf(request):
 
 
 def update_emp(request,id):
+    positiondetails = employee_positions.objects.all()
     employee = EmployeesReg.objects.get(id = id)
     context['id'] = employee.id
     context['empid'] = employee.empid
@@ -259,7 +264,8 @@ def update_emp(request,id):
     context['lname'] = employee.lname
     context['email'] = employee.email
     context['position'] = employee.position
-    return render(request,"updateuser.html",context)
+    context['positiondetails'] = positiondetails
+    return render(request,"updateEmp.html",context)
 
 def updateuser(request):
     if request.method == "POST":
@@ -301,10 +307,12 @@ def leaves(request):
     leave_type_count = leave_types.objects.all().count()
     pending = Leave.objects.filter(status = "pending").count()
     reject = Leave.objects.filter(status = "reject").count()
+    approve = Leave.objects.filter(status = "approve").count()
 
 
     leave = {}
 
+    leave['approve'] = approve
     leave['leaveDetails'] = result
     leave['reject'] = reject
     leave['count'] = count
@@ -371,6 +379,38 @@ def reject_leave(request,id):
     messages.success(request,"Reject  leave Sucessfully")
 
     return  redirect("leaves")
+
+
+def addNewLeave(request):
+     if request.method == "POST":
+        leaveType = request.POST['leaveType']
+        description = request.POST.get('description')
+
+        saveRecord = leave_types()
+        saveRecord.leave_type = leaveType
+        saveRecord.description = description
+        saveRecord.save()
+        messages.success(request,"Add Leave Type sucessfully")
+
+        return  redirect("leaves")
+
+
+def addNewEmpPosition(request):
+     if request.method == "POST":
+        positionType = request.POST['positionType']
+        description = request.POST.get('description')
+
+        saveRecord = employee_positions()
+        saveRecord.name = positionType
+        saveRecord.description = description
+        saveRecord.save()
+        messages.success(request,"Add Employee Type sucessfully")
+
+        return  redirect("adminpage")
+
+
+
+       
 
 
     

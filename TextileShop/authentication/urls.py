@@ -9,7 +9,7 @@ urlpatterns = [
     path('adminpage',views.adminpage, name = "adminpage"),
     path('userpage',views.userpage, name = "userpage"),
     path('changepassword',views.changepassword, name = "changepassword"),
-    path('applyleave',views.applyleave, name = "applyleave"),
+    path('applyleave/<id>',views.applyleave, name = "applyleave"),
     path('generatepdf',views.generatepdf, name = "generatepdf"),
     path('update_emp/<id>',views.update_emp, name = "update_emp"),
     path('delete_emp/<id>',views.delete_emp, name = "delete_emp"),
@@ -17,4 +17,6 @@ urlpatterns = [
     path('leaves',views.leaves, name = "leaves"),
     path('approve_leave/<id>',views.approve_leave, name = "approve_leave"),
     path('reject_leave/<id>',views.reject_leave, name = "reject_leave"),
+    path('addNewLeave',views.addNewLeave, name = "addNewLeave"),
+    path('addNewEmpPosition',views.addNewEmpPosition, name = "addNewEmpPosition"),
 ]
