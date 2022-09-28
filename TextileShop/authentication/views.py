@@ -27,6 +27,8 @@ from django.core.mail import send_mail
 # Create your views here.
 
 context = {}
+employee = {}
+leave = {}
 
 #send employee to his userid and password
 def sendMail(fname,email,empID,password):
@@ -112,8 +114,11 @@ def login(request):
                 empid = request.POST.get('empid',None)
                 context['empid'] = empid
                 context['fname'] = emp.fname
+                employee['fname'] = emp.fname
+                leave['fname'] = emp.fname
                 
 
+                
                 if emp.position == "admin" :
                     messages.success(request,"Admin login sucessfully")
                     return  redirect("adminpage")
@@ -131,8 +136,6 @@ def login(request):
 
 def adminpage(request):
 
-
-    employee = {}
     result = EmployeesReg.objects.all() 
     count = EmployeesReg.objects.all().count() 
     position = employee_positions.objects.all().count() 
@@ -144,6 +147,7 @@ def adminpage(request):
     eventcount = EmployeesReg.objects.filter(position = "Event manager").count()
     stockcount = EmployeesReg.objects.filter(position = "Stock manager").count()
     employeecount = EmployeesReg.objects.filter(position = "Employee manager").count()
+    suppliercount = EmployeesReg.objects.filter(position = "supplier manager").count()
 
     employee["count"] = count
     employee["position"] = position
@@ -155,6 +159,9 @@ def adminpage(request):
     employee["eventcount"] = eventcount
     employee["stockcount"] = stockcount
     employee["employeecount"] = employeecount
+    employee["suppliercount"] = suppliercount
+
+    employee['navabar'] = "adminPage"
 
 
     return render(request,"admin.html",employee)
@@ -187,6 +194,7 @@ def changepassword(request):
                     saveRecord.save()
                     messages.success(request,"Change password sucessfully")
                     return  redirect("userpage")
+                    
 
     return render(request,"changepassword.html",context)
 
@@ -255,6 +263,30 @@ def generatepdf(request):
     return FileResponse(buf,as_attachment=True,filename='employee.pdf')
 
 
+
+
+def printFile(request):
+
+    employee = EmployeesReg.objects.all()
+
+    template_path = 'pdf.html'
+    context['pdf'] = employee
+
+    response = HttpResponse(content_type = 'application/pdf')
+    response['content_Disposition'] = 'filename = "employee_report.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(html,dest=response)
+    
+    if pisa_status.err:
+        return HttpResponse('We had some errors')
+    return response
+
+
+
+
 def update_emp(request,id):
     positiondetails = employee_positions.objects.all()
     employee = EmployeesReg.objects.get(id = id)
@@ -294,6 +326,8 @@ def updateuser(request):
 def delete_emp(request,id):
     print(id)
     employee = EmployeesReg.objects.get(id = id)
+    empLeave = Leave.objects.filter(empid = employee.empid)
+    empLeave.delete()
     employee.delete()
     messages.success(request,"Delete details sucessfully")
     return  redirect("adminpage")
@@ -310,7 +344,7 @@ def leaves(request):
     approve = Leave.objects.filter(status = "approve").count()
 
 
-    leave = {}
+    
 
     leave['approve'] = approve
     leave['leaveDetails'] = result
@@ -321,7 +355,7 @@ def leaves(request):
     leave['leave_type'] = leave_type
     leave['leave_type_count'] = leave_type_count
 
-   
+    leave['navabar'] = "leavePage"
 
     return render(request,"table.html",leave)
 
@@ -407,6 +441,13 @@ def addNewEmpPosition(request):
         messages.success(request,"Add Employee Type sucessfully")
 
         return  redirect("adminpage")
+
+def delete_leave(request,id):
+    leave = Leave.objects.get(id = id)
+   
+    leave.delete()
+    messages.success(request,"Delete details sucessfully")
+    return  redirect("leaves")
 
 
 

@@ -12,9 +12,53 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
     <title>admin</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .adminDashboard,
+        .quickButtons {
+            margin-left: 16rem;
+        }
+
+        .quickButtons {
+            margin-top: 5rem;
+        }
+
+        h2 {
+            font-size: 15px;
+        }
+
+        input[type=text],
+        textarea,
+        input[type=password],
+        input[type=email],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            resize: vertical;
+        }
+
+        input[type="reset"] {
+            background-color: #EA6514;
+            padding: 15px 50px;
+            color: #fff;
+            font-size: 15px;
+            border: none;
+            border-radius: 50px;
+        }
+    </style>
 </head>
 
 <body>
+    {% include 'adminnavbar.html' %}
 
     <div class="quickButtons">
 
@@ -84,7 +128,7 @@
                 <h3>Employee Details</h3>
 
                 <div>
-                    <a href="generatepdf" class="print"> <i class="fa fa-print" aria-hidden="true"></i>Print Details</a>
+                    <a href="printFile" class="print"> <i class="fa fa-print" aria-hidden="true"></i>Print Details</a>
                     <a href="#divTwo" class="addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
                 </div>
 
@@ -136,36 +180,36 @@
                 const myChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: [{% for positions in positionDetails %} '{{positions.name}}',{% endfor%}],
-                        datasets: [{
-                            label: '',
-                            data: [{{admincount}},{{salescount}}, {{ordercount}}, {{stockcount}}, {{eventcount}},{{employeecount}}],
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
+                        labels: [{% for positions in positionDetails %} '{{positions.name}}',{% endfor %}],
+                datasets: [{
+                    label: '',
+                    data: [{{ admincount }}, {{ suppliercount }}, {{ ordercount }}, {{ stockcount }}, {{ eventcount }}, {{ employeecount }}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
                             borderWidth: 1
                         }]
                     },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
                         }
                     }
+                }
                 });
             </script>
         </div>
@@ -176,7 +220,7 @@
 
     <div class="overlay" id="divOne">
         <div class="wrapper">
-            <h2>ADD NEW Employee Position TYPE</h2>
+            <h4>Add New Employee Position Type</h4>
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="contanier">
@@ -185,7 +229,8 @@
                         <label for="">Position Type</label>
                         <input type="text" placeholder="New Position Type" name="positionType">
                         <label for="">Description</label>
-                        <textarea  id="" cols="20" rows="5" name="description" placeholder="Enter description here"></textarea>
+                        <textarea id="" cols="20" rows="5" name="description"
+                            placeholder="Enter description here"></textarea>
                         <input type="submit" value="Submit">
                     </form>
                 </div>
@@ -195,33 +240,126 @@
 
     <div class="overlay" id="divTwo">
         <div class="wrapper">
-            <h4>ADD NEW Employee </h4>
+            <h4>Add New Employee </h4>
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="contanier">
-                    <form class="requires-validation" action="register" method="post" novalidate>
-                        {%csrf_token%}       
-                        <input  type="text" name="empid" placeholder="Employee ID" required>
-                        <input  type="text" name="fname" placeholder="First Name" required>
-                        <input  type="text" name="lname" placeholder="Last Name" required>
-                        <input  type="email" name="email" placeholder="E-mail Address" required> 
+                    <form class="requires-validation" id="form" action="register" method="post" novalidate>
+                        {%csrf_token%}
+
+                        <span id="txtEmp"></span>
+                        <input type="text" name="empid" placeholder="Employee ID" id="empid"
+                            onkeydown="empIdvalidation()" required>
+                        <input type="text" name="fname" placeholder="First Name" required>
+                        <input type="text" name="lname" placeholder="Last Name" required>
+
+                        <span id="text"></span>
+                        <input type="email" name="email" placeholder="E-mail Address" id="email"
+                            onkeydown="validation()" required>
+
                         <select name="position" required>
                             {% for emp in positionDetails %}
                             <option value="{{emp.name}}">{{emp.name}}</option>
                             {% endfor %}
                         </select>
-                        <input class="form-control" type="password" name="password" placeholder="Password"  required>
 
-                        <input class="form-control" type="password" name="passwordc" placeholder="Confirm Password" required>
+                        <span id="txtPassword"></span>
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Password"
+                            onkeydown="empPassword()" required>
 
-                        <input type="submit" value="Submit">
+                        <input class="form-control" type="password" name="passwordc" placeholder="Confirm Password"
+                            required>
+
+                        <input type="submit" value="Submit"><input type="reset" value="Reset">
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    
+    <script type="text/javascript">
+        function validation() {
+            var form = document.getElementById("form");
+            var email = document.getElementById("email").value;
+            var text = document.getElementById("text");
+
+            var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+
+            if (email.match(pattern)) {
+                form.classList.add("valid");
+                form.classList.remove("invalid");
+                text.innerHTML = "Your email address is valid"
+                text.style.color = "#00ff00"
+            } else {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Your email address is invalid"
+                text.style.color = "#ff0000"
+            }
+
+        }
+
+        function empIdvalidation() {
+            var form = document.getElementById("form");
+            var empid = document.getElementById("empid").value;
+            var text = document.getElementById("txtEmp");
+
+            if (empid.startsWith('Emp')) {
+                form.classList.add("valid");
+                form.classList.remove("invalid");
+                text.innerHTML = "Employee id is valid"
+                text.style.color = "#00ff00"
+            } else {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Employee id  must start with 'Emp'"
+                text.style.color = "#ff0000"
+            }
+        }
+
+        function empPassword() {
+            var form = document.getElementById("form");
+            var password = document.getElementById("password").value;
+            var text = document.getElementById("txtPassword");
+
+            var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+
+            if (password.length < 8) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "password lenght must be 8 character"
+                text.style.color = "#ff0000"
+            } else if (password.search(/[0-9]/) == -1) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Atleast 1 numeric value must be enter"
+                text.style.color = "#ff0000"
+            }
+            else if (password.search(/[a-z]/) == -1) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Atleast 1 small letter  must be enter"
+                text.style.color = "#ff0000"
+            }
+            else if (password.search(/[A-Z]/) == -1) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Atleast 1 Upper letter  must be enter"
+                text.style.color = "#ff0000"
+            }
+            else {
+                form.classList.add("valid");
+                form.classList.remove("invalid");
+                text.innerHTML = "password is valid"
+                text.style.color = "#00ff00"
+            }
+        }
+
+
+    </script>
+
 
 
 

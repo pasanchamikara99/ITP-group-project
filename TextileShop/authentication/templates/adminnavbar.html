@@ -11,8 +11,8 @@
     <title>Admin</title>
 
     <style>
-        body {
-            background-color: #ebeff3;
+       body{
+            font-family: 'Poppins', sans-serif;
         }
 
         @media (min-width: 991.98px) {
@@ -32,6 +32,7 @@
             box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
             width: 240px;
             z-index: 600;
+           
         }
 
         @media (max-width: 991.98px) {
@@ -44,6 +45,8 @@
             border-radius: 5px;
             box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
         }
+
+        
 
         .sidebar-sticky {
             position: relative;
@@ -61,24 +64,16 @@
         }
         a{
             text-decoration: none;
-            background-color: red;
-            color: white;
-            padding: 8px;
-            border-radius: 5px;
+           
         }
         a:hover{
-            color: black;
+            color: white;
         }
-        #update{
-            background-color: #00ff40;
-        }
-        #add{
-            background-color: #0000ff;
-        }
-        #generatepdf{
-            background-color: orangered;
-        }
-    
+
+        
+
+        
+   
     </style>
 
 
@@ -92,8 +87,10 @@
         <!-- Sidebar -->
         <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
             <div class="position-sticky">
-                <div class="list-group list-group-flush mx-3 mt-4">
-                    <a href="#employee" class="list-group-item list-group-item-action py-2 ripple active">
+                <div class="list-group list-group-flush mx-3 mt-4">    
+                    <br><br>
+
+                    <a href="{% url 'adminpage' %}" class="list-group-item list-group-item-action py-2 ripple {% if navabar == 'adminPage'%} active {% endif%}">
                         <i class="fas fa-chart-area fa-fw me-3"></i><span>Employees</span>
                     </a>
                     <a href="#sales" class="list-group-item list-group-item-action py-2 ripple"><i
@@ -107,7 +104,7 @@
                             class="fas fa-chart-bar fa-fw me-3"></i><span>Orders</span></a>
                     <a href="#suppliers" class="list-group-item list-group-item-action py-2 ripple"><i
                             class="fas fa-building fa-fw me-3"></i><span>Suppliers</span></a>
-                    <a href="#leaves" class="list-group-item list-group-item-action py-2 ripple"><i
+                    <a href="{% url 'leaves' %}" class="list-group-item list-group-item-action py-2 ripple {% if navabar == 'leavePage'%} active {% endif%}"><i
                             class="fas fa-calendar fa-fw me-3"></i><span>leaves</span></a>
                 </div>
             </div>
@@ -115,13 +112,14 @@
         <!-- Sidebar -->
 
         <!-- Navbar -->
-        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Brand -->
-                    <img src="" alt="logo ekak danna " srcset="">
+                    <img src="" alt="logo ekak danna" srcset="">
+                    <a  href="" class="navbar-brand">Hello , {{fname}} </a>
                 
-                    <h4>Jayanandana Fashion House</h4><h6>admin panel</h6>
+                    <h4 style="color: white ;">Jayanandana Fashion House</h4><h6 style="color: white ;">admin panel</h6>
                     
                     </div>
                     

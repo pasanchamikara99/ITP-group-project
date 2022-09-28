@@ -10,11 +10,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
     <title>admin leave</title>
+    <style>
+        
+        body{
+            font-family: 'Poppins', sans-serif;
+        }
+        .adminDashboard,.quickButtons{
+            margin-left: 16rem;
+        }
+        .quickButtons{
+            margin-top: 5rem;
+        }
+
+        h2{
+            font-size: 15px;
+        }
+
+    </style>
+
+    
 </head>
 
 <body>
 
+    {%  include 'adminnavbar.html' %}
 
 
     <div class="quickButtons">
@@ -32,11 +53,11 @@
         </div>
 
         <div class="positions">
-            <h2> Pending Applicartions : </h2>
+            <h2> Pending Applications : </h2>
             <h3> {{pendingCount}} </h3>
         </div>
         <div class="positions">
-            <h2> Rejected Applicartions : </h2>
+            <h2> Rejected Applications : </h2>
             <h3> {{reject}} </h3>
         </div>
 
@@ -58,7 +79,7 @@
                 <table>
                     <thead>
                         <tr>
-                            
+
                             <th>Employee ID</th>
                             <th>Leave Type</th>
                             <th>Applied on</th>
@@ -70,14 +91,14 @@
                     <tbody>
                         {% for emp in leaveDetails %}
                         <tr>
-                            
+
                             <td>{{emp.empid}}</td>
                             <td>{{emp.leaveType}}</td>
                             <td>{{emp.date}}</td>
                             <td>{{emp.reason}}</td>
                             <td>{{emp.status}}</td>
                             <td>
-                                <a href="" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                <a href="{% url 'delete_leave' emp.id %}" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
                             </td>
 
                         </tr>
@@ -97,7 +118,7 @@
                 <table>
                     <thead>
                         <tr>
-                            
+
                             <th>Employee ID</th>
                             <th>Leave Type</th>
                             <th>Applied on</th>
@@ -109,7 +130,7 @@
                     <tbody>
                         {% for emp in pending_list %}
                         <tr>
-                            
+
                             <td>{{emp.empid}}</td>
                             <td>{{emp.leaveType}}</td>
                             <td>{{emp.date}}</td>
@@ -134,48 +155,48 @@
 
     <div class="adminDashboard">
 
-            <div class="tableTwo">
-                <div class="table_header">
-                    <h3>Avaliable Leave types</h3>
-                    <div>
-                        <a href="#divOne" class="addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
-                    </div>
-                </div>
-
-                <div class="table_section">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Leave type ID</th>
-                                <th>Leave Type</th>
-                                <th>Description</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for leave in leave_type %}
-                            <tr>
-                                <td>{{leave.id}}</td>
-                                <td>{{leave.leave_type}}</td>
-                                <td>{{leave.description}}</td>
-                                <td>
-                                    <a href="" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                </td>
-
-                            </tr>
-                            {% endfor %}
-
-                        </tbody>
-                    </table>
+        <div class="tableTwo">
+            <div class="table_header">
+                <h3>Avaliable Leave types</h3>
+                <div>
+                    <a href="#divOne" class="addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
                 </div>
             </div>
+
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Leave type ID</th>
+                            <th>Leave Type</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for leave in leave_type %}
+                        <tr>
+                            <td>{{leave.id}}</td>
+                            <td>{{leave.leave_type}}</td>
+                            <td>{{leave.description}}</td>
+                            <td>
+                                <a href="" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 
 
     <div class="overlay" id="divOne">
         <div class="wrapper">
-            <h2>ADD NEW LEAVE TYPE</h2>
+            <h2>Add New Leave Type</h2>
             <a href="#" class="close">&times;</a>
             <div class="content">
                 <div class="contanier">
@@ -184,7 +205,8 @@
                         <label for="">Leave Type</label>
                         <input type="text" placeholder="New Leave Type" name="leaveType">
                         <label for="">Description</label>
-                        <textarea  id="" cols="20" rows="5" name="description" placeholder="Enter description here"></textarea>
+                        <textarea id="" cols="20" rows="5" name="description"
+                            placeholder="Enter description here"></textarea>
                         <input type="submit" value="Submit">
                     </form>
                 </div>
@@ -192,17 +214,17 @@
         </div>
     </div>
 
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        {% for msg in messages %}
-        <script>
-            swal('{{msg}}');
-        </script>
-        {% endfor %}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    {% for msg in messages %}
+    <script>
+        swal('{{msg}}');
+    </script>
+    {% endfor %}
 
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
 </body>
 

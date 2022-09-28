@@ -47,7 +47,7 @@
     <nav class="navbar navbar-dark bg-dark justify-content-between">
         <a  href="userpage" class="navbar-brand">Hello , {{fname}} </a>
         <nav class="navbar navbar-dark bg-dark">    
-              <button class="btn btn-outline-success" type="button"> <a  href="changepassword">Change Password </a></button>
+              <button class="btn btn-outline-success" type="button"> <a  href="{% url 'changepassword'  %}">Change Password </a></button>
               <button class="btn btn-outline-success" type="button"><a href="{% url 'applyleave' empid %}">Apply Leave </a> </button>
           </nav>
       </nav>
