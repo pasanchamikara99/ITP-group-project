@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%  static 'style.css' %}">
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+     <style>
+        body
+        {
+         
+            background-image: url('{% static "background.jpg" %}');
+            background-position: center;
+            background-size: 1800px 900px;
+            background-position: top;
+            background-attachment: fixed;
+        
+        }
+        #changePassword,
+        #applyleave{
+            text-decoration: none;
+            color: white;
+            padding: 8px 10px;
+            background-color: #6ADC0B;
+            margin: 2px;
+            font-weight: bolder;
+            border: none;
+            border-radius: 5px;
+    
+        }
+        #leavebtn{
+            margin-top: 5px;
+        }
+        input[type = submit]:hover{
+            background-color: #0AB8DA;
+        }
+        a:hover{
+            text-decoration: none;
+            color: white;
+        }
+        .chart{
+            margin: 10px;
+            margin-left: 1rem;
+            max-width: 15%;
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .leaves{
+           justify-content: space-between;
+        }
+        #changePassword:hover,
+        #applyleave:hover{
+            background-color:#0AB8DA ;
+            border: none;
+            border-radius: 5px;
+        }
+        .active{
+            background-color: #6ADC0B;
+            border: none;
+            border-radius: 5px;
+        }
+        i{
+            color: white;
+        }
+        .chart h4{
+            color: #333;
+        }
+        .wrapper,
+       .contanier
+       {
+        background: transparent;
+       }
+       .wrapper{
+        border: 3px solid white;
+       }
+
+       .wrapper h2,label{
+        color: white;
+       }
+       #logout{
+        margin-left: 15px;
+        text-decoration: none;
+        color: white;
+        padding: 8px 10px;
+        background-color: red;
+        border-radius: 5px;
+        font-weight: bold;
+       }
+       #logout:hover{
+            background-color: white;
+            color: red;
+       }
+       .upper{
+            display: flex;
+            justify-content: space-between;
+        }
+        .table_section{
+            margin: 10px;
+            max-height: 200px;
+            border-radius: 5px;
+        }
+        tbody td{
+            color: white;
+            font-weight: bold;
+        }
+
+     </style>
+    <title>Document</title>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark bg-dark justify-content-between">
+        <i class='fas fa-tshirt'style='font-size:24px'><a href="{% url 'userpage'  %}" class="navbar-brand">Hello , {{fname}}</a></i>
+        <nav class="navbar navbar-dark bg-dark">    
+            <a  href="{% url 'changepassword'  %}" id="changePassword" class = "active">Change Password </a>
+            <a href="{% url 'applyleave' empid %}" id="applyleave" class = "{% if navabar == 'leavePage'%} active {% endif%}" >Apply Leave </a>
+            <i class="fa-solid fa-right-from-bracket"><a id="logout" href="{% url 'index' %}">log out</a></i>
+          </nav>
+      </nav>
+
+
+      {% block content %}
+      {% endblock %}
+
+
+
+
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+      {% for msg in messages %}
+      <script>
+          swal('{{msg}}');
+      </script>
+      {% endfor %}
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    
+</body>
+</html>

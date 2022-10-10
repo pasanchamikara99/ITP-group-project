@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%  static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
+    <title>admin</title>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .adminDashboard,
+        .quickButtons {
+            margin-left: 16rem;
+        }
+
+        .quickButtons {
+            margin-top: 5rem;
+        }
+
+        .quickButtons h2 {
+            font-size: 25px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .quickButtons h3 {
+            font-size: 20px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        thead th{
+            text-align: center;
+        }
+
+        input[type=text],
+        textarea,
+        input[type=password],
+        input[type=email],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 5px;
+            margin-bottom: 8px;
+            resize: vertical;
+        }
+
+        input[type="reset"] {
+            background-color: #EA6514;
+            padding: 15px 50px;
+            color: #fff;
+            font-size: 15px;
+            border: none;
+            border-radius: 50px;
+        }
+        .quickButtons i{
+            margin: 2px;
+            font-size: 30px;
+            padding: 5px;
+        }
+
+        .quickButtons .positions{
+            background-color: #0DAED5;
+            border: none;
+            border-radius: 5px;
+        }
+     
+    </style>
+</head>
+
+<body>
+    {% include 'adminnavbar.html' %}
+
+    <div class="quickButtons">
+
+        <div class="positions">
+
+            <i class="fa fa-user" aria-hidden="true" ></i>
+            <h2>Total No of Positions : </h2>
+            <h3> {{position}} </h3>
+        </div>
+
+        <div class="positions">
+            <i class="fa fa-users" aria-hidden="true" ></i>
+            <h2> Total No of Employees : </h2>
+            <h3> {{count}} </h3>
+
+        </div>
+
+        <div class="positions">
+            <i class="fa fa-building" aria-hidden="true"></i>
+            <h2> Total No of Departments: </h2>   
+            <h3> {{position}} </h3>
+        </div>
+    </div>
+
+
+    <div class="adminDashboard">
+
+
+        <div class="tableOne">
+            <div class="table_header">
+                <h3>Employee Position Details</h3>
+
+                <div>
+                    <a href="#divOne" class="addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
+                </div>
+
+            </div>
+
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Position ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in positionDetails %}
+                        <tr>
+                            <td>{{result.id}}</td>
+                            <td>{{result.name}}</td>
+                            <td>{{result.description}}</td>
+                            <td><a href="#" class="update"> <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></a>
+                                <a href="{% url 'delete_position' result.id %}" class="delete"><i class="fa fa-trash"
+                                        aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tableTwo">
+            <div class="table_header">
+                <h3>Employee Details</h3>
+
+                <div>
+                    <a href="printFile" class="print"> <i class="fa fa-print" aria-hidden="true"></i>Print Details</a>
+                    <a href="#divTwo" class="addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
+                </div>
+
+            </div>
+
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>E-mail</th>
+                            <th>Position</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emp in details %}
+                        <tr>
+                            <td>{{emp.empid}}</td>
+                            <td>{{emp.fname}}</td>
+                            <td>{{emp.lname}}</td>
+                            <td>{{emp.email}}</td>
+                            <td>{{emp.position}}</td>
+                            <td><a href="{% url 'update_emp' emp.id %}" class="update"> <i class="fa fa-pencil"
+                                        aria-hidden="true"></i></a>
+                                <a href="{% url 'delete_emp' emp.id %}" class="delete"><i class="fa fa-trash"
+                                        aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="adminDashboard">
+        <div class="tableThree">
+            <div class="table_header">
+                <h3>Employee Count by Positions</h3>
+            </div>
+            <canvas id="myChart" width="400" height="400"></canvas>
+            <script>
+                const ctx = document.getElementById('myChart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: [{% for positions in positionDetails %} '{{positions.name}}',{% endfor %}],
+                datasets: [{
+                    label: '',
+                    data: [{{ admincount }}, {{ stockcount }}, {{ eventcount }},{{ employeecount }},{{ ordercount }},{{ suppliercount }} ],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                            borderWidth: 1
+                        }]
+                    },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+                });
+            </script>
+        </div>
+    </div>
+
+
+
+
+    <div class="overlay" id="divOne">
+        <div class="wrapper">
+            <h4>Add New Employee Position Type</h4>
+            <a href="#" class="close">&times;</a>
+            <div class="content">
+                <div class="contanier">
+                    <form action="addNewEmpPosition" method="post">
+                        {%csrf_token%}
+                        <label for="">Position Type</label>
+                        <input type="text" placeholder="New Position Type" name="positionType">
+                        <label for="">Description</label>
+                        <textarea id="" cols="20" rows="5" name="description"
+                            placeholder="Enter description here"></textarea>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="divTwo">
+        <div class="wrapper">
+            <h4>Add New Employee </h4>
+            <a href="#" class="close">&times;</a>
+            <div class="content">
+                <div class="contanier">
+                    <form class="requires-validation" id="form" action="register" method="post" novalidate>
+                        {%csrf_token%}
+
+                        <span id="txtEmp"></span>
+                        <input type="text" name="empid" placeholder="Employee ID" id="empid"
+                            onkeydown="empIdvalidation()" required>
+                        <input type="text" name="fname" placeholder="First Name" required>
+                        <input type="text" name="lname" placeholder="Last Name" required>
+
+                        <span id="text"></span>
+                        <input type="email" name="email" placeholder="E-mail Address" id="email"
+                            onkeydown="validation()" required>
+
+                        <select name="position" required>
+                            {% for emp in positionDetails %}
+                            <option value="{{emp.name}}">{{emp.name}}</option>
+                            {% endfor %}
+                        </select>
+
+                        <span id="txtPassword"></span>
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Password"
+                            onkeydown="empPassword()" required>
+
+                        <input class="form-control" type="password" name="passwordc" placeholder="Confirm Password"
+                            required>
+
+                        <input type="submit" value="Submit"><input type="reset" value="Reset">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function validation() {
+            var form = document.getElementById("form");
+            var email = document.getElementById("email").value;
+            var text = document.getElementById("text");
+
+            var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+
+            if (email.match(pattern)) {
+                form.classList.add("valid");
+                form.classList.remove("invalid");
+                text.innerHTML = "Your email address is valid"
+                text.style.color = "#00ff00"
+            } else {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Your email address is invalid"
+                text.style.color = "#ff0000"
+            }
+
+        }
+
+        function empIdvalidation() {
+            var form = document.getElementById("form");
+            var empid = document.getElementById("empid").value;
+            var text = document.getElementById("txtEmp");
+
+            if (empid.startsWith('Emp')) {
+                form.classList.add("valid");
+                form.classList.remove("invalid");
+                text.innerHTML = "Employee id is valid"
+                text.style.color = "#00ff00"
+            } else {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Employee id  must start with 'Emp'"
+                text.style.color = "#ff0000"
+            }
+        }
+
+        function empPassword() {
+            var form = document.getElementById("form");
+            var password = document.getElementById("password").value;
+            var text = document.getElementById("txtPassword");
+
+            var pattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+
+            if (password.length < 8) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "password lenght must be 8 character"
+                text.style.color = "#ff0000"
+            } else if (password.search(/[0-9]/) == -1) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Atleast 1 numeric value must be enter"
+                text.style.color = "#ff0000"
+            }
+            else if (password.search(/[a-z]/) == -1) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Atleast 1 small letter  must be enter"
+                text.style.color = "#ff0000"
+            }
+            else if (password.search(/[A-Z]/) == -1) {
+                form.classList.add("invalid");
+                form.classList.remove("valid");
+                text.innerHTML = "Atleast 1 Upper letter  must be enter"
+                text.style.color = "#ff0000"
+            }
+            else {
+                form.classList.add("valid");
+                form.classList.remove("invalid");
+                text.innerHTML = "password is valid"
+                text.style.color = "#00ff00"
+            }
+        }
+
+
+    </script>
+
+
+
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    {% for msg in messages %}
+    <script>
+        swal('{{msg}}');
+    </script>
+    {% endfor %}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

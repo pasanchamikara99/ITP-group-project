@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%  static 'style.css' %}">
+    <title>Update Employee</title>
+
+
+    <style>
+        body{
+            background-color: #333;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <h2>Update Employee Details</h2>
+        <div class="content">
+            <div class="contanier">
+                <form action="{% url 'updateuser'  %}" method="post">
+                    {%csrf_token%}
+                    <input type="text" name="empid" placeholder="Employee ID" value="{{empid}}"  required>
+                    <label for="">Employee First Name</label>
+                    <input type="text" name="fname" placeholder="First Name" value="{{fname}}" required>
+                    <label for="">Employee Last Name</label>
+                    <input type="text" name="lname" placeholder="Last Name" value="{{lname}}" required>
+                    <label for="">Employee E-mail</label>
+                    <input type="email" name="email" placeholder="E-mail Address" value="{{email}}" required>
+                    <label for="">Employee Position</label>
+                    <select name="position" required>
+                        <option value="{{position}}">{{position}}</option>
+                        {% for emp in positiondetails %}
+                        <option value="{{emp.name}}">{{emp.name}}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+    </script>
+  
+  
+    {% for msg in messages %}
+  
+    <h1>msg</h1>
+    <script>
+      swal('{{msg}}');
+    </script>
+    {% endfor %}
+  
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+
+</body>
+
+</html>

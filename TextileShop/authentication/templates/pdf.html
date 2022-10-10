@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <title>Employee Details Report</title>
+
+
+    <style>
+        body {
+            border: 2px solid #333;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 2rem;
+            border-collapse: collapse;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 10px 15px;
+            border-style: none;
+            background-color: aqua;
+            color: white;
+
+        }
+
+        .print {
+            background-color: #0AB8DA;
+            color: white;
+            margin-top: 10px;
+        }
+
+
+        .table {
+            margin-top: 2rem;
+            width: 90%;
+            background-color: white;
+        }
+
+        .border {
+            border: 2px solid;
+            max-width: 80%;
+            margin: 2rem;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #f6f9fc;
+            color: #8493a5;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        h1{
+            font-size: 25px;
+            border: none;
+        }
+        h3{
+            font-size: 22px;
+            border: none;
+        }
+
+        th,
+        td {
+            border: none;
+            padding: 7px 7px;
+            text-align: center;
+            word-break :break-all;
+            font-size: 12px;
+            letter-spacing: 0.35px;
+
+
+        }
+
+        #email{
+            text-align:center;
+            font-size: 10px;
+            word-break :break-all;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <center>
+        <div class="border">
+
+            <h1>Jayananda Fashion House </h1>
+            <h3>Dikwalla</h3>
+
+
+
+            <div class="table">
+                <div class="table_header">
+                    <h3>All Employee Details</h3>
+                   
+
+                </div>
+
+                <div class="table_section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Employee ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>E-mail</th>
+                                <th>Position</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for emp in pdf %}
+                            <tr>
+                                <td>{{emp.empid}}</td>
+                                <td>{{emp.fname}}</td>
+                                <td>{{emp.lname}}</td>
+                                <td id = "email">{{emp.email}}</td>
+                                <td>{{emp.position}}</td>
+
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+    </center>
+
+
+</body>
+
+</html>

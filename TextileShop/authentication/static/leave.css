@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body{
+    font-family: 'Poppins', sans-serif;
+}
+
+a{
+    text-decoration: none;
+    padding: 10px 15px;
+    border-style:none;
+    
+}
+
+.table_section a{
+    font-size: 10px;
+    padding: 1px 1px;
+}
+
+.quickButtons{
+    margin-left: 15rem;
+    margin-top: 2rem;
+    width: 80%;
+    display: flex;
+}
+
+.positions {
+    width: 30%;
+    margin: 10px;
+    border-style: solid;
+    border-color: #0AB8DA;
+    height: 8rem;
+}
+h2
+{
+    margin-left: 15px;
+    font-size: 15px;
+}
+.quickButtons h3{
+    text-align: right;
+    margin-right: 5rem;
+    font-size: 25px;
+}
+
+
+
+.adminDashboard{
+    margin-left: 0rem;
+    margin-top: 2rem;
+    width: 85%;
+    display: flex;
+}
+i{
+    color: white;
+    size: 5cm;
+    margin-right: 5px;
+}
+
+.tableOne{
+    max-width: 50%;
+}
+
+.tableThree{
+    max-width: 55%;
+}
+
+.tableTwo{
+    max-width: 55%;
+    margin-left: 2rem;
+}
+
+.table_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(240, 240, 240);
+}
+
+.addNew{
+    background-color:#6ADC0B;
+    color: white;
+}
+
+.print{
+    background-color: #0AB8DA;
+    color: white;
+}
+
+.update i{
+    color: blue;
+    size: 50px;
+}
+.delete i{
+    color: red;
+    size: 50px;
+   
+}
+
+
+
+thead th{
+    position: sticky;
+    top: 0;
+    background-color: #f6f9fc;
+    color: #8493a5;
+    font-size: 11px;
+}
+th,td{
+    border-bottom: 1px solid #dddddd;
+    padding: 7px 7px;
+    text-align: center;
+    word-break: break-all;
+    font-size: 12px;
+}
+
+
+
+.overlay{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    transition: opacity 500ms;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.overlay:target{
+    visibility: visible;
+    opacity: 1;
+}
+
+.wrapper{
+    margin: 70px auto;
+    padding: 20px;
+    background: #e7e7e7;
+    border-radius: 5px;
+    width: 30%;
+    position: relative;
+    transition: all 5s ease-in-out;
+}
+
+.wrapper h2{
+    margin-top: 0;
+    color: #333;
+}
+.wrapper .close{
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+
+.wrapper .content{
+    max-height: 30%;
+    overflow: auto;
+}
+
+.contanier{
+    border-radius: 5px;
+    background-color: #e7e7e7;
+    padding: 20px 0;
+}
+
+form label{
+    font-weight: 500;
+}
+
+input[type = text],textarea{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+input[type = "submit"]{
+    background-color: #6ADC0B;
+    padding: 15px 50px;
+    color: #fff;
+    font-size: 15px;
+    border: none;
+    border-radius: 50px;
+}

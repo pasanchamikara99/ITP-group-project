@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="stylesheet" href="{%  static 'leave.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    
+    <title>admin leave</title>
+    <style>
+        
+        body{
+            font-family: 'Poppins', sans-serif;
+            background-color: #89A5AC;
+        }
+        .adminDashboard,.quickButtons{
+            margin-left: 16rem;
+            
+        }
+        .quickButtons{
+            margin-top: 5rem;
+        }
+
+        h2{
+            font-size: 15px;
+        }
+        .quickButtons h2 {
+            font-size: 20px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .quickButtons h3 {
+            font-size: 18px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .quickButtons i{
+            margin: 2px;
+            font-size: 30px;
+            padding: 5px;
+        }
+
+        .quickButtons .positions{
+            background-color: #0DAED5;
+            border: none;
+            border-radius: 5px;
+        }
+        thead th{
+            text-align: center;
+        }
+
+
+    </style>
+
+    
+</head>
+
+<body>
+
+    {%  include 'adminnavbar.html' %}
+
+
+    <div class="quickButtons">
+
+        <div class="positions">
+            <i class="fa fa-file" aria-hidden="true"></i>
+            <h2> Avaliable Leave Types : </h2>
+            <h3> {{leave_type_count}} </h3>
+        </div>
+
+        <div class="positions">
+            <i class="fa fa-users" aria-hidden="true" ></i>
+            <h2> Total No of Employees : </h2>
+            <h3> {{count}} </h3>
+
+        </div>
+
+        <div class="positions">
+            <i class="fa fa-clock" aria-hidden="true"></i>
+            <h2> Pending Applications : </h2>
+            <h3> {{pendingCount}} </h3>
+        </div>
+        <div class="positions">
+            <i class="fa fa-ban" aria-hidden="true"></i> 
+            <h2>Rejected Applications : </h2>
+            <h3> {{reject}} </h3>
+
+        </div>
+
+    </div>
+
+
+    <div class="adminDashboard">
+
+
+        <div class="tableOne">
+            <div class="table_header">
+                <h3>All leave Applications</h3>
+                
+            </div>
+
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th>Employee ID</th>
+                            <th>Leave Type</th>
+                            <th>Applied on</th>
+                            <th>Reason</th>
+                            <th>Current Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emp in leaveDetails %}
+                        <tr>
+
+                            <td>{{emp.empid}}</td>
+                            <td>{{emp.leaveType}}</td>
+                            <td>{{emp.date}}</td>
+                            <td>{{emp.reason}}</td>
+                            <td>{{emp.status}}</td>
+                            <td>
+                                <a href="{% url 'delete_leave' emp.id %}" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tableTwo">
+            <div class="table_header">
+                <h3>Pending leave Applications</h3>
+            </div>
+
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th>Employee ID</th>
+                            <th>Leave Type</th>
+                            <th>Applied on</th>
+                            <th>Reason</th>
+                            <th>Current Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emp in pending_list %}
+                        <tr>
+
+                            <td>{{emp.empid}}</td>
+                            <td>{{emp.leaveType}}</td>
+                            <td>{{emp.date}}</td>
+                            <td>{{emp.reason}}</td>
+                            <td>{{emp.status}}</td>
+
+
+                            <td><a href="{% url 'approve_leave' emp.id %}" class="update"> <i class="fa fa-check-circle"
+                                        aria-hidden="true">approve</i></a>
+                                <a href="{% url 'reject_leave' emp.id %}" class="delete"><i class="fa fa-ban"
+                                        aria-hidden="true">Reject</i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="adminDashboard">
+
+        <div class="tableTwo">
+            <div class="table_header">
+                <h3>Avaliable Leave types</h3>
+                <div>
+                    <a href="#divOne" class="addNew"><i class="fa fa-plus" aria-hidden="true"></i>Add New</a>
+                </div>
+            </div>
+
+            <div class="table_section">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Leave type ID</th>
+                            <th>Leave Type</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for leave in leave_type %}
+                        <tr>
+                            <td>{{leave.id}}</td>
+                            <td>{{leave.leave_type}}</td>
+                            <td>{{leave.description}}</td>
+                            <td>
+                                <a href="" class="delete"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            </td>
+
+                        </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="overlay" id="divOne">
+        <div class="wrapper">
+            <h2>Add New Leave Type</h2>
+            <a href="#" class="close">&times;</a>
+            <div class="content">
+                <div class="contanier">
+                    <form action="addNewLeave" method="post">
+                        {%csrf_token%}
+                        <label for="">Leave Type</label>
+                        <input type="text" placeholder="New Leave Type" name="leaveType">
+                        <label for="">Description</label>
+                        <textarea id="" cols="20" rows="5" name="description"
+                            placeholder="Enter description here"></textarea>
+                        <input type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    {% for msg in messages %}
+    <script>
+        swal('{{msg}}');
+    </script>
+    {% endfor %}
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
