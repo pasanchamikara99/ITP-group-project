@@ -69,11 +69,13 @@
         a:hover{
             color: white;
         }
+        
+        i a{
+            text-decoration: none;
+            color: white;
+        }
 
         
-
-        
-   
     </style>
 
 
@@ -116,10 +118,10 @@
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Brand -->
-                    <img src="" alt="logo ekak danna" srcset="">
-                    <a  href="" class="navbar-brand">Hello , {{fname}} </a>
+                <i class='fas fa-tshirt'style='font-size:24px'><a  href="" class="navbar-brand">Hello , {{fname}} </a></i>
+                    
                 
-                    <h4 style="color: white ;">Jayanandana Fashion House</h4><h6 style="color: white ;">admin panel</h6>
+                    <h4 style="color: white ;">Jayananda Fashion House</h4><i class="fa-solid fa-right-from-bracket"><a href="{% url 'index' %}">log out</a></i>
                     
                     </div>
                     

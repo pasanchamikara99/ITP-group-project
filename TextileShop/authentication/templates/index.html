@@ -14,29 +14,70 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
-        body{
-            background-color: #333;
+        body {
+            background-image: url('{% static "background.jpg" %}');
+            background-position: center;
+            background-size: 1800px 900px;
+            background-position: top;
+            background-attachment: fixed;
         }
 
-        .wrapper{
+        input[type=text],
+        textarea,
+        input[type=password],
+        input[type=email],
+        select {
+
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 6px;
+            margin-bottom: 16px;
+            resize: vertical;
+        }
+
+        .wrapper {
             margin-top: 10rem;
         }
-        input[type = submit]{
+
+        input[type=submit] {
             font-size: 15px;
             font-weight: 500;
         }
-        input[type = submit]:hover{
+
+        input[type=submit]:hover {
             background-color: #0AB8DA;
         }
+        h2{
+            margin-top: 3rem;
+            color: white;
+            font-weight: bold;
+            font-size: 35px;
+        }
+       .wrapper,
+       .contanier
+       {
+        background: transparent;
+       }
+       .wrapper{
+        border: 3px solid white;
+       }
+
+       .wrapper h3,label{
+        color: white;
+       }
     </style>
 
 </head>
 
 <body>
 
+    <center><h2>Jayanada Fashion House</h2></center>
 
     <div class="wrapper">
-        <h2>Employee Login</h2>
+        <h3>Employee Login</h3>
         <div class="content">
             <div class="contanier">
                 <form action="{% url 'login'  %}" method="post">
@@ -52,7 +93,7 @@
             </div>
         </div>
     </div>
-  
+
 
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
     </script>

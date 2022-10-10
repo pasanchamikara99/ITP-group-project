@@ -27,8 +27,20 @@
             margin-top: 5rem;
         }
 
-        h2 {
-            font-size: 15px;
+        .quickButtons h2 {
+            font-size: 25px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .quickButtons h3 {
+            font-size: 20px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        thead th{
+            text-align: center;
         }
 
         input[type=text],
@@ -54,6 +66,18 @@
             border: none;
             border-radius: 50px;
         }
+        .quickButtons i{
+            margin: 2px;
+            font-size: 30px;
+            padding: 5px;
+        }
+
+        .quickButtons .positions{
+            background-color: #0DAED5;
+            border: none;
+            border-radius: 5px;
+        }
+     
     </style>
 </head>
 
@@ -64,18 +88,21 @@
 
         <div class="positions">
 
-            <h2> Total No of Positions : </h2>
+            <i class="fa fa-user" aria-hidden="true" ></i>
+            <h2>Total No of Positions : </h2>
             <h3> {{position}} </h3>
         </div>
 
-        <div class="totalEmp">
+        <div class="positions">
+            <i class="fa fa-users" aria-hidden="true" ></i>
             <h2> Total No of Employees : </h2>
             <h3> {{count}} </h3>
 
         </div>
 
-        <div class="new">
-            <h2> Total No of Departments: </h2>
+        <div class="positions">
+            <i class="fa fa-building" aria-hidden="true"></i>
+            <h2> Total No of Departments: </h2>   
             <h3> {{position}} </h3>
         </div>
     </div>
@@ -110,9 +137,9 @@
                             <td>{{result.id}}</td>
                             <td>{{result.name}}</td>
                             <td>{{result.description}}</td>
-                            <td><a href="{% url 'update_emp' result.id %}" class="update"> <i class="fa fa-pencil"
+                            <td><a href="#" class="update"> <i class="fa fa-pencil"
                                         aria-hidden="true"></i></a>
-                                <a href="{% url 'delete_emp' result.id %}" class="delete"><i class="fa fa-trash"
+                                <a href="{% url 'delete_position' result.id %}" class="delete"><i class="fa fa-trash"
                                         aria-hidden="true"></i></a>
                             </td>
                         </tr>
@@ -183,7 +210,7 @@
                         labels: [{% for positions in positionDetails %} '{{positions.name}}',{% endfor %}],
                 datasets: [{
                     label: '',
-                    data: [{{ admincount }}, {{ suppliercount }}, {{ ordercount }}, {{ stockcount }}, {{ eventcount }}, {{ employeecount }}],
+                    data: [{{ admincount }}, {{ stockcount }}, {{ eventcount }},{{ employeecount }},{{ ordercount }},{{ suppliercount }} ],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

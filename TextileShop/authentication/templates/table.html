@@ -16,9 +16,11 @@
         
         body{
             font-family: 'Poppins', sans-serif;
+            background-color: #89A5AC;
         }
         .adminDashboard,.quickButtons{
             margin-left: 16rem;
+            
         }
         .quickButtons{
             margin-top: 5rem;
@@ -27,6 +29,33 @@
         h2{
             font-size: 15px;
         }
+        .quickButtons h2 {
+            font-size: 20px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .quickButtons h3 {
+            font-size: 18px;
+            margin: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .quickButtons i{
+            margin: 2px;
+            font-size: 30px;
+            padding: 5px;
+        }
+
+        .quickButtons .positions{
+            background-color: #0DAED5;
+            border: none;
+            border-radius: 5px;
+        }
+        thead th{
+            text-align: center;
+        }
+
 
     </style>
 
@@ -41,24 +70,28 @@
     <div class="quickButtons">
 
         <div class="positions">
-
+            <i class="fa fa-file" aria-hidden="true"></i>
             <h2> Avaliable Leave Types : </h2>
             <h3> {{leave_type_count}} </h3>
         </div>
 
         <div class="positions">
+            <i class="fa fa-users" aria-hidden="true" ></i>
             <h2> Total No of Employees : </h2>
             <h3> {{count}} </h3>
 
         </div>
 
         <div class="positions">
+            <i class="fa fa-clock" aria-hidden="true"></i>
             <h2> Pending Applications : </h2>
             <h3> {{pendingCount}} </h3>
         </div>
         <div class="positions">
-            <h2> Rejected Applications : </h2>
+            <i class="fa fa-ban" aria-hidden="true"></i> 
+            <h2>Rejected Applications : </h2>
             <h3> {{reject}} </h3>
+
         </div>
 
     </div>
@@ -70,9 +103,7 @@
         <div class="tableOne">
             <div class="table_header">
                 <h3>All leave Applications</h3>
-                <div>
-                    <a href="generatepdf" class="print"> <i class="fa fa-print" aria-hidden="true"></i>Print Details</a>
-                </div>
+                
             </div>
 
             <div class="table_section">
