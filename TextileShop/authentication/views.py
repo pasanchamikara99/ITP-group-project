@@ -240,7 +240,7 @@ def changepassword(request):
 def applyleave(request,id):
  
     leave_type = leave_types.objects.all()
-    count = Leave.objects.filter(empid = id).count()
+    count = Leave.objects.filter(empid = id , status = "approve").count()
     leaves = Leave.objects.filter(empid = id)
     context['leaveType'] = leave_type
     context['count'] = count
@@ -262,6 +262,9 @@ def applyleave(request,id):
             messages.success(request,"Please fill all the feilds")
         elif past.date() < today.date():
              messages.success(request,"Please select  valid date ")
+
+        elif count > 20 :
+             messages.success(request,"Cannot apply leave ...  ")
         else:
             saveRecord = Leave()
             saveRecord.empid = empID
