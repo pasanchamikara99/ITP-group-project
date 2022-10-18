@@ -119,11 +119,11 @@
 <body>
 
     <nav class="navbar navbar-dark bg-dark justify-content-between">
-        <i class='fas fa-tshirt'style='font-size:24px'><a href="{% url 'userpage'  %}" class="navbar-brand">Hello , {{fname}}</a></i>
+        <i class='fas fa-tshirt'style='font-size:24px'><a href="{% url 'userpage'  %}" class="navbar-brand">Hello , {{ request.session.username }}</a></i>
         <nav class="navbar navbar-dark bg-dark">    
             <a  href="{% url 'changepassword'  %}" id="changePassword" class = "active">Change Password </a>
             <a href="{% url 'applyleave' empid %}" id="applyleave" class = "{% if navabar == 'leavePage'%} active {% endif%}" >Apply Leave </a>
-            <i class="fa-solid fa-right-from-bracket"><a id="logout" href="{% url 'index' %}">log out</a></i>
+            <i class="fa-solid fa-right-from-bracket"><a id="logout" href="{% url 'logout'  %}">log out</a></i>
           </nav>
       </nav>
 

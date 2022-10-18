@@ -134,8 +134,14 @@ def login(request):
                 context['fname'] = emp.fname
                 employee['fname'] = emp.fname
                 leave['fname'] = emp.fname
+
+
+                request.session['username'] = emp.fname
+                request.session['empid'] = empid
+                request.session['type'] = emp.position
                            
                 if emp.position == "admin" :  ## user position admin redire to admin page
+                    
                     messages.success(request,"Admin login sucessfully")
                     return  redirect("adminpage")
                 else :
@@ -152,35 +158,44 @@ def login(request):
 
 def adminpage(request):
 
-    result = EmployeesReg.objects.all() 
-    count = EmployeesReg.objects.all().count() 
-    position = employee_positions.objects.all().count() 
-    positiondetails = employee_positions.objects.all()
 
-    admincount = EmployeesReg.objects.filter(position = "admin").count()
-    salescount = EmployeesReg.objects.filter(position = "salesManager").count()
-    ordercount = EmployeesReg.objects.filter(position = "order manager").count()
-    eventcount = EmployeesReg.objects.filter(position = "Event manager").count()
-    stockcount = EmployeesReg.objects.filter(position = "Stock manager").count()
-    employeecount = EmployeesReg.objects.filter(position = "Employee manager").count()
-    suppliercount = EmployeesReg.objects.filter(position = "supplier manager").count()
+    if 'username' not in request.session:
+        return  redirect("index")
+    else :
+        type = request.session.get('type')
 
-    employee["count"] = count
-    employee["position"] = position
-    employee["details"] = result
-    employee["positionDetails"] = positiondetails
-    employee["admincount"] = admincount
-    employee["ordercount"] = ordercount
-    employee["salescount"] = salescount
-    employee["eventcount"] = eventcount
-    employee["stockcount"] = stockcount
-    employee["employeecount"] = employeecount
-    employee["suppliercount"] = suppliercount
+        if type != "admin":
+            return  redirect("index")
+        else:
+            result = EmployeesReg.objects.all() 
+            count = EmployeesReg.objects.all().count() 
+            position = employee_positions.objects.all().count() 
+            positiondetails = employee_positions.objects.all()
 
-    employee['navabar'] = "adminPage"
+            admincount = EmployeesReg.objects.filter(position = "admin").count()
+            salescount = EmployeesReg.objects.filter(position = "salesManager").count()
+            ordercount = EmployeesReg.objects.filter(position = "order manager").count()
+            eventcount = EmployeesReg.objects.filter(position = "Event manager").count()
+            stockcount = EmployeesReg.objects.filter(position = "Stock manager").count()
+            employeecount = EmployeesReg.objects.filter(position = "Employee manager").count()
+            suppliercount = EmployeesReg.objects.filter(position = "supplier manager").count()
+
+            employee["count"] = count
+            employee["position"] = position
+            employee["details"] = result
+            employee["positionDetails"] = positiondetails
+            employee["admincount"] = admincount
+            employee["ordercount"] = ordercount
+            employee["salescount"] = salescount
+            employee["eventcount"] = eventcount
+            employee["stockcount"] = stockcount
+            employee["employeecount"] = employeecount
+            employee["suppliercount"] = suppliercount
+
+            employee['navabar'] = "adminPage"
 
 
-    return render(request,"admin.html",employee)
+            return render(request,"admin.html",employee)
 
 
 
@@ -188,7 +203,11 @@ def adminpage(request):
 
 
 def userpage(request):
-    return render(request,"user.html",context)
+
+    if 'username' in request.session:
+        return render(request,"user.html",context)
+    else :
+        return redirect("index.html")
 
     
 
@@ -199,39 +218,42 @@ def userpage(request):
 
 def changepassword(request):
 
-    context['navbar'] = "changePassword"
-    if request.method == "POST":
-        empID = request.POST.get('empid')
-        password = request.POST.get('password')
-        passwordc = request.POST.get('passwordc')
+    if 'username' not in request.session:
+        return render(request,"index.html",context)
+    else :
+        context['navbar'] = "changePassword"
+        if request.method == "POST":
+            empID = request.POST.get('empid')
+            password = request.POST.get('password')
+            passwordc = request.POST.get('passwordc')
 
 
-        if len(password) == 0 or len(password) == 0:  ##check passwords are null or not
-            messages.success(request,"Please fill all the fields !!! ")
-            return  redirect("changepassword")
-        
-        ##check password are match
-        else:
-            if password != passwordc:
-                messages.success(request,"Password mismatch , try again !!! ")
+            if len(password) == 0 or len(password) == 0:  ##check passwords are null or not
+                messages.success(request,"Please fill all the fields !!! ")
                 return  redirect("changepassword")
+            
+            ##check password are match
             else:
-                result = EmployeesReg.objects.filter(empid=empID)   
-                for re in result:
-                    saveRecord = EmployeesReg()
-                    saveRecord.id = re.id
-                    saveRecord.empid = empID
-                    saveRecord.fname = re.fname
-                    saveRecord.lname = re.lname
-                    saveRecord.email = re.email
-                    saveRecord.position = re.position
-                    saveRecord.password = make_password(password)
-                    saveRecord.save()
-                    messages.success(request,"Change password sucessfully")
-                    return  redirect("userpage")
-                    
+                if password != passwordc:
+                    messages.success(request,"Password mismatch , try again !!! ")
+                    return  redirect("changepassword")
+                else:
+                    result = EmployeesReg.objects.filter(empid=empID)   
+                    for re in result:
+                        saveRecord = EmployeesReg()
+                        saveRecord.id = re.id
+                        saveRecord.empid = empID
+                        saveRecord.fname = re.fname
+                        saveRecord.lname = re.lname
+                        saveRecord.email = re.email
+                        saveRecord.position = re.position
+                        saveRecord.password = make_password(password)
+                        saveRecord.save()
+                        messages.success(request,"Change password sucessfully")
+                        return  redirect("userpage")
+                        
 
-    return render(request,"changepassword.html",context)
+        return render(request,"changepassword.html",context)
 
     return render(request,"changepassword.html",context)
 
@@ -239,45 +261,49 @@ def changepassword(request):
 
 def applyleave(request,id):
  
-    leave_type = leave_types.objects.all()
-    count = Leave.objects.filter(empid = id , status = "approve").count()
-    leaves = Leave.objects.filter(empid = id)
-    context['leaveType'] = leave_type
-    context['count'] = count
-    context['navbar'] = "leavePage"
-    context['leaves'] = leaves
+    if 'username' not in request.session:
+        return render(request,"index.html",context)
+    else :
+        
+        leave_type = leave_types.objects.all()
+        count = Leave.objects.filter(empid = id , status = "approve").count()
+        leaves = Leave.objects.filter(empid = id)
+        context['leaveType'] = leave_type
+        context['count'] = count
+        context['navbar'] = "leavePage"
+        context['leaves'] = leaves
 
-    today = datetime.now()
+        today = datetime.now()
     
-    if request.method == "POST":
-        empID = request.POST.get('empid')
-        date = request.POST.get('date')
-        reason = request.POST.get('reason')
-        leavetype = request.POST.get('leavetype')
+        if request.method == "POST":
+            empID = request.POST.get('empid')
+            date = request.POST.get('date')
+            reason = request.POST.get('reason')
+            leavetype = request.POST.get('leavetype')
 
-        past = datetime.strptime(date, '%Y-%m-%d')
-       
+            past = datetime.strptime(date, '%Y-%m-%d')
+        
 
-        if len(reason) == 0 or len(date) == 0 :
-            messages.success(request,"Please fill all the feilds")
-        elif past.date() < today.date():
-             messages.success(request,"Please select  valid date ")
+            if len(reason) == 0 or len(date) == 0 :
+                messages.success(request,"Please fill all the feilds")
+            elif past.date() < today.date():
+                messages.success(request,"Please select  valid date ")
 
-        elif count > 20 :
-             messages.success(request,"Cannot apply leave ...  ")
-        else:
-            saveRecord = Leave()
-            saveRecord.empid = empID
-            saveRecord.date = date
-            saveRecord.reason = reason
-            saveRecord.leaveType = leavetype
-            saveRecord.status = "pending"
-            saveRecord.save()
-            messages.success(request,"Apply leave sucessfully")
-            return  redirect("userpage")
+            elif count > 20 :
+                messages.success(request,"Cannot apply leave ...  ")
+            else:
+                saveRecord = Leave()
+                saveRecord.empid = empID
+                saveRecord.date = date
+                saveRecord.reason = reason
+                saveRecord.leaveType = leavetype
+                saveRecord.status = "pending"
+                saveRecord.save()
+                messages.success(request,"Apply leave sucessfully")
+                return  redirect("userpage")
 
 
-    return render(request,"applyleave.html",context)
+        return render(request,"applyleave.html",context)
 
 
 #def generatepdf(request):
@@ -534,6 +560,13 @@ def delete_leave(request,id):
     leave.delete()
     messages.success(request,"Delete details sucessfully")
     return  redirect("leaves")
+
+
+def logout(request):
+    if 'username' in request.session:
+        request.session.flush()
+    return redirect("index")
+
 
 
 

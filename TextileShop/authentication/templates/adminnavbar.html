@@ -118,10 +118,10 @@
             <!-- Container wrapper -->
             <div class="container-fluid">
                 <!-- Brand -->
-                <i class='fas fa-tshirt'style='font-size:24px'><a  href="" class="navbar-brand">Hello , {{fname}} </a></i>
+                <i class='fas fa-tshirt'style='font-size:24px'><a  href="" class="navbar-brand">Hello , {{ request.session.username }} </a></i>
                     
                 
-                    <h4 style="color: white ;">Jayananda Fashion House</h4><i class="fa-solid fa-right-from-bracket"><a href="{% url 'index' %}">log out</a></i>
+                    <h4 style="color: white ;">Jayananda Fashion House</h4><i class="fa-solid fa-right-from-bracket"><a href="{% url 'logout'  %}">log out</a></i>
                     
                     </div>
                     
