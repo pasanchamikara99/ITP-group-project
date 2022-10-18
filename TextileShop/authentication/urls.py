@@ -22,4 +22,5 @@ urlpatterns = [
     path('printFile',views.printFile, name = "printFile"),
     path('delete_leave/<id>',views.delete_leave, name = "delete_leave"),
     path('delete_position/<id>',views.delete_position, name = "delete_position"),
+    path('logout',views.logout, name = "logout"),
 ]

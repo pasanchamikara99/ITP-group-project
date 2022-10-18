@@ -87,7 +87,7 @@
         <div class="content">
             <form action="applyleave" method="post" novalidate>
                 {%csrf_token%}
-                <input name="empid" type="hidden" value="{{empid}}" required>
+                <input name="empid" type="hidden" value="{{ request.session.empid }}" required>
                 <label for="">Select Date</label>
                 <input class="form-control" type="date" name="date"   id = "demo" required>
                 <label for="">Reason</label>
