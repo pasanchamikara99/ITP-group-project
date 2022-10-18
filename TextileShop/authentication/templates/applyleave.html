@@ -12,6 +12,8 @@
 
         <div class="chart">
             <h4>Annual Leaves</h4>
+
+            <p>Taken leaves: {{count}} </p>
             <canvas id="myChart" width="400" height="400"></canvas>
             <script>
                 const ctx = document.getElementById('myChart').getContext('2d');
@@ -87,7 +89,7 @@
                 {%csrf_token%}
                 <input name="empid" type="hidden" value="{{empid}}" required>
                 <label for="">Select Date</label>
-                <input class="form-control" type="date" name="date" required>
+                <input class="form-control" type="date" name="date"   id = "demo" required>
                 <label for="">Reason</label>
                 <textarea rows="5" name="reason" placeholder="Enter your reason" required></textarea>
                 <label for="">Leave Type</label>
@@ -99,6 +101,29 @@
             </form>
         </div>
     </div>
+
+
+    <script>
+
+        var date = new Date(); 
+        var tDate = date.getDate();
+        var tMonth = date.getMonth() + 1;
+        var tYear = date.getUTCFullYear();
+
+       if(tDate < 10){
+            tDate = '0' + tDate;
+        }
+        if(tMonth < 10){
+            tMonth = '0' + tMonth;
+        }
+
+       
+
+        var today = tYear + "-" + tMonth + "-" + tDate;
+        console.log(today);
+        document.getElementById("demo").setAttribute('min',today);
+
+    </script>
 
 
 </div>
