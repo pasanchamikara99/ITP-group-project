@@ -207,7 +207,7 @@ def userpage(request):
     if 'username' in request.session:
         return render(request,"user.html",context)
     else :
-        return redirect("index.html")
+        return redirect("index")
 
     
 
@@ -217,6 +217,8 @@ def userpage(request):
 
 
 def changepassword(request):
+
+
 
     if 'username' not in request.session:
         return render(request,"index.html",context)
@@ -256,6 +258,39 @@ def changepassword(request):
         return render(request,"changepassword.html",context)
 
     return render(request,"changepassword.html",context)
+
+
+
+def applyOT(request,id):
+ 
+    if 'username' not in request.session:
+        return render(request,"index.html",context)
+    else :
+        
+        if request.method == "POST":
+            empID = request.POST.get('empid')
+            otHours = request.POST.get('othours')
+           
+        
+            if len(otHours) == 0 :
+                messages.success(request,"Please fill all the feilds")
+            else:
+                subject = "Apply OT "
+                message = "Employee ID : " + empID + "\n And Total No of OT Hours : " + otHours 
+                send_mail(
+                        subject,message,'jayanandanafachion@gmail.com',['pasanchamikara989@gmail.com']
+                    )
+                messages.success(request,"Apply OT  sucessfully")
+                return  redirect("userpage")
+
+
+        return render(request,"applyOT.html",context)
+
+
+
+
+
+
 
 
 

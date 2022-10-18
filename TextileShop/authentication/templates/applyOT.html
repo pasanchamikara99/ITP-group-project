@@ -1,0 +1,27 @@
+{% extends 'baseNavbar.html' %}
+
+{% block content %}
+<div class="wrapper">
+    <h2>Apply OT </h2>
+    <div class="content">
+        <div class="contanier">
+            <form action="applyOT" id="form" method="post" novalidate>
+                {%csrf_token%}
+                <input class="form-control" type="hidden" name="empid" value="{{ request.session.empid }}" required>
+                <label for="">OT Hours</label>
+                <input type="text" name="othours" id = "othours" placeholder="Enter OT Hours"  required>
+                <input type="submit" value="Submit">
+                <br>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}
