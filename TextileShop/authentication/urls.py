@@ -14,6 +14,7 @@ urlpatterns = [
     #path('generatepdf',views.generatepdf, name = "generatepdf"),
     path('update_emp/<id>',views.update_emp, name = "update_emp"),
     path('delete_emp/<id>',views.delete_emp, name = "delete_emp"),
+    path('view_emp/<id>',views.view_emp, name = "view_emp"),
     path('updateuser',views.updateuser, name = "updateuser"),
     path('leaves',views.leaves, name = "leaves"),
     path('approve_leave/<id>',views.approve_leave, name = "approve_leave"),
