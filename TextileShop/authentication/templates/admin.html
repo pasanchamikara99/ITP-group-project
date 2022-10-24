@@ -23,7 +23,7 @@
             margin-left: 16rem;
         }
 
-    
+
 
         .quickButtons {
             margin-top: 5rem;
@@ -81,6 +81,14 @@
             background-color: #0DAED5;
             border: none;
             border-radius: 5px;
+        }
+
+        .tableTwo {
+            max-width: 65%;
+            margin-left: 2rem;
+        }
+        .view i{
+                color: #0DAED5;
         }
     </style>
 </head>
@@ -188,6 +196,10 @@
                                         aria-hidden="true"></i></a>
                                 <a href="{% url 'delete_emp' emp.id %}" class="delete"><i class="fa fa-trash"
                                         aria-hidden="true"></i></a>
+
+                                <a href="{% url 'view_emp' emp.empid %}" class="view"><i class="fa fa-eye" aria-hidden="true"></i></a>
+
+
                             </td>
                         </tr>
                         {% endfor %}

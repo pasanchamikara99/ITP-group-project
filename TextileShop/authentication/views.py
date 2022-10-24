@@ -136,12 +136,12 @@ def login(request):
                 leave['fname'] = emp.fname
 
 
+                ##add session values
                 request.session['username'] = emp.fname
                 request.session['empid'] = empid
                 request.session['type'] = emp.position
                            
                 if emp.position == "admin" :  ## user position admin redire to admin page
-                    
                     messages.success(request,"Admin login sucessfully")
                     return  redirect("adminpage")
                 else :
@@ -307,6 +307,7 @@ def applyleave(request,id):
         context['count'] = count
         context['navbar'] = "leavePage"
         context['leaves'] = leaves
+        context['avaliable'] = 20 - count
 
         today = datetime.now()
     
@@ -440,6 +441,37 @@ def updateuser(request):
 
 
 
+def view_emp(request,id):
+    employee = EmployeesReg.objects.get(empid = id)##get employee details using id
+    leave_count = Leave.objects.filter(empid = id).count 
+    context['id'] = employee.id
+    context['empid'] = employee.empid
+    context['fname'] = employee.fname
+    context['lname'] = employee.lname
+    context['email'] = employee.email
+    context['position'] = employee.position
+    context['total_leave'] = leave_count
+
+    
+
+    template_path = 'leave_report.html'  ##get template
+
+    response = HttpResponse(content_type = 'application/pdf')
+    response['content_Disposition'] = 'filename = "employee_report_leave.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(html,dest=response)
+    
+    if pisa_status.err:
+        return HttpResponse('We had some errors')
+    return response
+    
+    
+
+
+
 
 
 
@@ -482,27 +514,35 @@ def delete_position(request,id):
 
 def leaves(request):
 
-    result = Leave.objects.all()
-    pending_list = Leave.objects.filter(status = "pending") 
-    count = EmployeesReg.objects.all().count()
-    leave_type = leave_types.objects.all()
-    leave_type_count = leave_types.objects.all().count()
-    pending = Leave.objects.filter(status = "pending").count()
-    reject = Leave.objects.filter(status = "reject").count()
-    approve = Leave.objects.filter(status = "approve").count()
+    if 'username' not in request.session:
+        return  redirect("index")
+    else :
+        type = request.session.get('type')
 
-    leave['approve'] = approve
-    leave['leaveDetails'] = result
-    leave['reject'] = reject
-    leave['count'] = count
-    leave['pending_list'] = pending_list
-    leave['pendingCount'] = pending
-    leave['leave_type'] = leave_type
-    leave['leave_type_count'] = leave_type_count
+        if type != "admin":
+            return  redirect("index")
+        else :
+            result = Leave.objects.all()
+            pending_list = Leave.objects.filter(status = "pending") 
+            count = EmployeesReg.objects.all().count()
+            leave_type = leave_types.objects.all()
+            leave_type_count = leave_types.objects.all().count()
+            pending = Leave.objects.filter(status = "pending").count()
+            reject = Leave.objects.filter(status = "reject").count()
+            approve = Leave.objects.filter(status = "approve").count()
 
-    leave['navabar'] = "leavePage"
+            leave['approve'] = approve
+            leave['leaveDetails'] = result
+            leave['reject'] = reject
+            leave['count'] = count
+            leave['pending_list'] = pending_list
+            leave['pendingCount'] = pending
+            leave['leave_type'] = leave_type
+            leave['leave_type_count'] = leave_type_count
 
-    return render(request,"table.html",leave)
+            leave['navabar'] = "leavePage"
+
+            return render(request,"table.html",leave)
 
 
 
