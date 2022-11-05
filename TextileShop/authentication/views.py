@@ -21,6 +21,7 @@ from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
 from django.core.mail import send_mail
 from datetime import datetime
+from django.db.models import Count
 
 import re
 
@@ -86,8 +87,8 @@ def register(request):
             elif EmployeesReg.objects.filter(empid = empID).exists() :
                 messages.success(request,"Employee ID already exists, try new ID  !!! ")
         
-        ##elif EmployeesReg.objects.filter(email = email).exists() :
-               # messages.success(request,"Employee email already exists, try new email  !!! ")
+            elif EmployeesReg.objects.filter(email = email).exists() :
+               messages.success(request,"Employee email already exists, try new email  !!! ")
 
             else:
                 saveRecord = EmployeesReg()
@@ -141,7 +142,7 @@ def login(request):
                 request.session['empid'] = empid
                 request.session['type'] = emp.position
                            
-                if emp.position == "admin" :  ## user position admin redire to admin page
+                if emp.position == "admin" :  ## user position admin redirect to admin page
                     messages.success(request,"Admin login sucessfully")
                     return  redirect("adminpage")
                 else :
@@ -180,6 +181,16 @@ def adminpage(request):
             employeecount = EmployeesReg.objects.filter(position = "Employee manager").count()
             suppliercount = EmployeesReg.objects.filter(position = "supplier manager").count()
 
+            each_Emp_count = EmployeesReg.objects.values('position').annotate(total_count=Count('empid'))
+
+
+            arr = []
+
+            for i in each_Emp_count :
+                arr.append(int(i['total_count']))
+
+          
+            employee["each_emp_count"] = arr
             employee["count"] = count
             employee["position"] = position
             employee["details"] = result
@@ -205,6 +216,11 @@ def adminpage(request):
 def userpage(request):
 
     if 'username' in request.session:
+
+        employees = EmployeesReg.objects.get(empid = request.session.get('empid'))
+
+        context['userpage'] = employees
+
         return render(request,"user.html",context)
     else :
         return redirect("index")
@@ -258,6 +274,39 @@ def changepassword(request):
         return render(request,"changepassword.html",context)
 
     return render(request,"changepassword.html",context)
+
+
+def view_emp(request,id):
+    employee = EmployeesReg.objects.get(empid = id)##get employee details using id
+    leave_count = Leave.objects.filter(empid = id,status = "approve").count 
+
+    leave = Leave.objects.filter(empid = id) 
+    context['id'] = employee.id
+    context['empid'] = employee.empid
+    context['fname'] = employee.fname
+    context['lname'] = employee.lname
+    context['email'] = employee.email
+    context['position'] = employee.position
+    context['total_leave'] = leave_count
+    context['leave'] = leave
+
+
+    
+
+    template_path = 'leave_report.html'  ##get template
+
+    response = HttpResponse(content_type = 'application/pdf')
+    response['content_Disposition'] = 'filename = "employee_report_leave.pdf"'
+
+    template = get_template(template_path)
+    html = template.render(context)
+
+    pisa_status = pisa.CreatePDF(html,dest=response)
+    
+    if pisa_status.err:
+        return HttpResponse('We had some errors')
+    return response
+
 
 
 
@@ -438,37 +487,6 @@ def updateuser(request):
             messages.success(request,"Update details sucessfully")
 
     return  redirect("adminpage")
-
-
-
-def view_emp(request,id):
-    employee = EmployeesReg.objects.get(empid = id)##get employee details using id
-    leave_count = Leave.objects.filter(empid = id).count 
-    context['id'] = employee.id
-    context['empid'] = employee.empid
-    context['fname'] = employee.fname
-    context['lname'] = employee.lname
-    context['email'] = employee.email
-    context['position'] = employee.position
-    context['total_leave'] = leave_count
-
-    
-
-    template_path = 'leave_report.html'  ##get template
-
-    response = HttpResponse(content_type = 'application/pdf')
-    response['content_Disposition'] = 'filename = "employee_report_leave.pdf"'
-
-    template = get_template(template_path)
-    html = template.render(context)
-
-    pisa_status = pisa.CreatePDF(html,dest=response)
-    
-    if pisa_status.err:
-        return HttpResponse('We had some errors')
-    return response
-    
-    
 
 
 

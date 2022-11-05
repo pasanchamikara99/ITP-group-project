@@ -118,11 +118,11 @@
 <body>
 
     <nav class="navbar navbar-dark bg-dark justify-content-between">
-        <i class='fas fa-tshirt'style='font-size:24px'><a href="{% url 'userpage'  %}" class="navbar-brand">Hello , {{ request.session.username }}</a></i>
+        <i class='fas fa-tshirt'style='font-size:24px'><a href="{% url 'userpage'%}" class="navbar-brand">Hello , {{ request.session.username }}</a></i>
         <nav class="navbar navbar-dark bg-dark">    
             <a  href="{% url 'changepassword'  %}" id="changePassword" class = "{% if navabar == 'changePassword'%} active {% endif%}">Change Password </a>
-            <a href="{% url 'applyleave' empid %}" id="applyleave" class = "{% if navabar == 'leavePage'%} active {% endif%}" >Apply Leave </a>
-            <a href="{% url 'applyOT' empid %}" id="applyleave" class = "{% if navabar == 'leavePage'%} active {% endif%}" >Apply OT </a>
+            <a href="{% url 'applyleave' request.session.empid %}" id="applyleave" class = "{% if navabar == 'leavePage'%} active {% endif%}" >Apply Leave </a>
+            <a href="{% url 'applyOT' request.session.empid %}" id="applyleave" class = "{% if navabar == 'leavePage'%} active {% endif%}" >Apply OT </a>
             <i class="fa-solid fa-right-from-bracket"><a id="logout" href="{% url 'logout'  %}">log out</a></i>
           </nav>
       </nav>
