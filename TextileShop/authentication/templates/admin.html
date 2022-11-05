@@ -149,9 +149,9 @@
                             <td>{{result.id}}</td>
                             <td>{{result.name}}</td>
                             <td>{{result.description}}</td>
-                            <td><a href="#" class="update"> <i class="fa fa-pencil" aria-hidden="true"></i></a>
-                                <a href="{% url 'delete_position' result.id %}" class="delete"><i class="fa fa-trash"
-                                        aria-hidden="true"></i></a>
+                            <td>
+                                <a href="{% url 'delete_position' result.id %}" class="delete"><i class="fa fa-ban"
+                                    aria-hidden="true">DELETE</i></a></a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -225,7 +225,7 @@
                         labels: [{% for positions in positionDetails %} '{{positions.name}}',{% endfor %}],
                 datasets: [{
                     label: '',
-                    data: [{{ admincount }}, {{ stockcount }}, {{ eventcount }}, {{ employeecount }}, {{ ordercount }}, {{ suppliercount }}],
+                    data: [{%  for i in each_emp_count %} '{{i}}',{% endfor %}],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

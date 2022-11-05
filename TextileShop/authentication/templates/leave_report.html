@@ -104,7 +104,7 @@
 
             <div class="table">
                 <div class="table_header">
-                    <h3>{{empid}} Leave Details</h3>
+                    <h3>{{empid}} Employee Details</h3>
                    
 
                 </div>
@@ -132,6 +132,42 @@
                                 <td>{{position}}</td>
                                 <td>{{total_leave}}</td>
                             </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <h3>Leave Details</h3>
+
+                <div class="table_section">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Leave ID</th>
+                                <th>Applyed Date</th>
+                                <th>Reason</th>
+                                <th>Leave Type</th>
+                                <th>Status</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for emp in leave %}
+                            
+                            <tr>
+                                
+
+                                <td>{{emp.id}}</td> 
+                                <td>{{emp.date}}</td>
+                                <td>{{emp.reason}}</td>
+                                <td>{{emp.leaveType}}</td>
+                                <td>{{emp.status}}</td>
+
+                                
+                            </tr>
+
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

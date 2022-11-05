@@ -2,10 +2,82 @@
 
 
 {% block content %}
+<section >
+  <div class="container py-5">
+    </div>
+    
+    <center>
 
-<h1>User file</h1>
 
-<h1>User id is {{request.session.empid}}</h1>
+      <div class="col-lg-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{userpage.fname}}</h5>
+            <p class="text-muted mb-1">{{userpage.position}}</p>
+            <p class="text-muted mb-4">Fashion Dikwella</p>
+            <div class="d-flex justify-content-center mb-2">
+            </div>
+          </div>
+        </div>
+       
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Employee ID </p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{userpage.empid}}</p>
+                </div>
+              </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">First Name</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{userpage.fname}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Last Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{userpage.lname}}</p>
+                </div>
+              </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Email</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{userpage.email}}</p>
+              </div>
+            </div>  
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Position</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">{{userpage.position}}</p>
+                </div>
+              </div>  
+          </div>
+        </div>
+       
+      </div>
+    </center>
+    </div>
+  </div>
+</section>
 
 
 {% endblock %}
