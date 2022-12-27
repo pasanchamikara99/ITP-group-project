@@ -1,7 +1,3 @@
-# Employee-Management
-Django Employee Management system (Test)
+# Employee-Management function (ITP Group Project)
 
 
-##Subheader
-
-Watch tutorial on Yoututbe
