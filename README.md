@@ -1,12 +1,14 @@
 # Employee-Management function (ITP Group Project)
 
-Group Members : 
-              K.L.P.Chamikara
-              S.V.Dewasurendra
-              Sachin Lakshan
-              Thewuni Wanniarachci
-              Imedha
-              Ishini Gamage
+# Used technologies :
+                      Python
+                      Html/Css
+                      JavaScript
+                      MySql
+                      Git/Github
+                      
+                      
+  # Employee Management function Screenshots
 
 
 ![employee1](https://user-images.githubusercontent.com/75413812/209738170-c59cb2d1-ce1d-482e-8a59-9df483517de7.PNG)
