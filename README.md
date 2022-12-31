@@ -1,4 +1,6 @@
-# Employee-Management function (ITP Group Project)
+# Fashion Shop Management System (ITP Group Project) 
+
+## (Employee Management Function) 
 
 # Used technologies :
                       Python
